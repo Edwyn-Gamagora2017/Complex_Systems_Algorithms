@@ -1,2 +1,1 @@
-# a_star
-Implementation of an A_star algorithm for the course on Complex Systems (Gamagora 2017 M2)
+AI algorithms applied to video game contexts, which implies restrictions related to real time efficiency. So, we decided to use some heuristics that privileges fast solutions The algorithms are applied to unity scenes as a means to show its behavior.
