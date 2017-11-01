@@ -13,9 +13,6 @@ public class MapView : MonoBehaviour {
 	Camera mapCamera;			// Camera that is responsable for showing the map
 	[SerializeField]
 	GameObject mapTilePrefab;	// Element that represents a mapTile
-	[SerializeField]
-	Sprite[] tileSprites;		// Sprites that are going to be used to show the tiles of the map. The index of the tileSprite matchs the Enum TileType
-	// TODO create a custom Unity inspector for the tile sprite
 
 	/* PROPERTIES */
 	public Map MapModel {
@@ -39,8 +36,8 @@ public class MapView : MonoBehaviour {
 		GameObject result = null;
 		if( type != Map.MapTileType.NotDefined ){
 			result = GameObject.Instantiate( mapTilePrefab, mapContainer.transform );
-			result.GetComponent<SpriteRenderer>().sprite = tileSprites[ Map.typeToTypeIndex( type ) ];
 			result.transform.position = new Vector3(x,y);
+			result.GetComponent<MapTileView>().setType( type );
 		}
 		return result;
 	}

@@ -5,10 +5,10 @@
 # 3 Rock
 # 4 Mud
 
-# format: H W 4neighborhood bidirectional
+# Map format: H W 4neighborhood bidirectional
 10 8 1 1
 
-# format: type
+# Map format: type
 0 0 0 0 0 0 0 0
 0 1 0 1 1 1 1 0
 0 1 0 1 1 1 0 0
@@ -19,3 +19,14 @@
 0 3 0 3 3 3 3 0
 0 3 0 3 3 3 3 0
 0 0 0 0 0 0 0 0
+
+# player amount
+1
+# player x y
+1 4
+# 1 7
+
+# enemy amount
+1
+# enemy x y
+7 5

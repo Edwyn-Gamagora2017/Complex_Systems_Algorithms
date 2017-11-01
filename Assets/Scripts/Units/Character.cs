@@ -8,4 +8,13 @@ public class Character {
 	public Character( Vector2 pos ){
 		this.pos = pos;
 	}
+
+	public Vector2 Pos {
+		get {
+			return pos;
+		}
+		set {
+			pos = value;
+		}
+	}
 }

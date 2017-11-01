@@ -56,7 +56,7 @@ public class Map {
 		}
 	}
 
-	public Map( int height, int width, List<Character> players, List<Character> enemies, bool neighborhood4, bool bidirectional ){
+	public Map( int height, int width, bool neighborhood4, bool bidirectional ){
 		this.generateMapTileValue();
 
 		this.height = height;
@@ -70,8 +70,8 @@ public class Map {
 				this.mapTiles[i][j] = MapTileType.NotDefined;
 			}
 		}
-		this.players = players;
-		this.enemies = enemies;
+		this.players = new List<Character>();
+		this.enemies = new List<Character>();
 		this.neighborhood4 = neighborhood4;
 
 		// Each tile is a vertex in the graph
@@ -169,6 +169,16 @@ public class Map {
 		}
 	}
 
+	private bool checkCharacterPosition( Character c ){
+		return this.isUsefulPosition( Mathf.RoundToInt( c.Pos.x ), Mathf.RoundToInt( c.Pos.y ) );
+	}
+	public void addPlayer( Character player ){
+		this.players.Add( player );
+	}
+	public void addEnemy( Character enemy ){
+		this.enemies.Add( enemy );
+	}
+
 	public string toString()
 	{
 		string res = "Map : {\nheight = "+this.height.ToString ()+"\nwidth = "+this.width.ToString ()+"\n";
@@ -197,7 +207,7 @@ public class Map {
 		try{
 			string[] linesWithComments = content.Split('\n');
 			List<string[]> lines = new List<string[]>();
-			// filtering comments
+			// filtering comments and empty lines
 			for ( int i = 0; i < linesWithComments.Length; i++ ){
 				string[] lineSplitSpace = linesWithComments[i].Trim().Split(' ');
 				if( lineSplitSpace.Length > 0 && lineSplitSpace[0].Length > 0 && lineSplitSpace[0][0] != '#' ){
@@ -205,22 +215,46 @@ public class Map {
 				}
 			}
 
+			int lineIt = 0;
 			// initial info
-			string[] infoline = lines[0];
+			string[] infoline = lines[lineIt];
+			lineIt++;
 			int height = int.Parse(infoline [0]);
 			int width = int.Parse(infoline [1]);
 			bool neighborhood4 = int.Parse(infoline [2]) == 1;
 			bool bidirectional = int.Parse(infoline [3]) == 1;
 
-			// TODO players and enemies
-			Map m = new Map(height, width, null, null, neighborhood4, bidirectional);
+			Map m = new Map(height, width, neighborhood4, bidirectional);
 
 			// Vertices
 			for (int y = 0; y < height; y++) {
-				string[] mapLine = lines[1+y];
+				string[] mapLine = lines[lineIt];
+				lineIt++;
 				for( int x = 0; x < width; x++ ){
 					m.addTile( x, height-1-y, Map.typeIndexToType( int.Parse(mapLine[x]) ) );
 				}
+			}
+
+			// Characters
+			// Players
+			int nPlayers = int.Parse( lines[lineIt][0] );
+			lineIt++;
+			for( int i=0; i<nPlayers; i++ ){
+				Character c = new Character( new Vector2( int.Parse( lines[lineIt][0] ), int.Parse(lines[lineIt][1]) ));
+				if( m.checkCharacterPosition( c ) ){
+					m.addPlayer(c);
+				}
+				lineIt++;
+			}
+			// Enemies
+			int nEnemies = int.Parse( lines[lineIt][0] );
+			lineIt++;
+			for( int i=0; i<nEnemies; i++ ){
+				Character c = new Character( new Vector2( int.Parse( lines[lineIt][0] ), int.Parse(lines[lineIt][1]) ));
+				if( m.checkCharacterPosition( c ) ){
+					m.addEnemy(c);
+				}
+				lineIt++;
 			}
 
 			return m;
