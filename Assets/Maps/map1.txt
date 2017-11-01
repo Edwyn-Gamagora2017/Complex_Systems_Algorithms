@@ -8,7 +8,7 @@
 # Map format: H W 4neighborhood bidirectional
 10 8 1 1
 
-# Map format: type
+# Map format: types ( 0,0 -> bottom left )
 0 0 0 0 0 0 0 0
 0 1 0 1 1 1 1 0
 0 1 0 1 1 1 0 0
@@ -23,10 +23,9 @@
 # player amount
 1
 # player x y
-1 4
-# 1 7
+4 1
 
 # enemy amount
 1
 # enemy x y
-7 5
+5 7

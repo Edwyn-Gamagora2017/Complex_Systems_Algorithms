@@ -49,10 +49,13 @@ public class Map {
 			return width;
 		}
 	}
-
-	public MapTileType[][] MapTiles {
-		get {
-			return mapTiles;
+	/*GETTERS*/
+	public MapTileType getTileType(int x, int y){
+		if( this.isValidTilePosition(x,y) ){
+			return this.mapTiles[y][x];
+		}
+		else{
+			return MapTileType.NotDefined;
 		}
 	}
 
@@ -154,23 +157,11 @@ public class Map {
 		return (int)type;
 	}
 
-	/*GETTERS*/
-	public Graph getGraph {
-		get {
-			return graph;
-		}
+	public Vector2 getCharacterPosition( Character c ){
+		return new Vector2( Mathf.RoundToInt( c.getPosX() ), Mathf.RoundToInt( c.getPosY() ));
 	}
-	public MapTileType getTileType(int x, int y){
-		if( this.isValidTilePosition(x,y) ){
-			return this.mapTiles[y][x];
-		}
-		else{
-			return MapTileType.NotDefined;
-		}
-	}
-
 	private bool checkCharacterPosition( Character c ){
-		return this.isUsefulPosition( Mathf.RoundToInt( c.Pos.x ), Mathf.RoundToInt( c.Pos.y ) );
+		return this.isUsefulPosition( (int)getCharacterPosition( c ).x, (int)getCharacterPosition( c ).y );
 	}
 	public void addPlayer( Character player ){
 		this.players.Add( player );
@@ -240,9 +231,12 @@ public class Map {
 			int nPlayers = int.Parse( lines[lineIt][0] );
 			lineIt++;
 			for( int i=0; i<nPlayers; i++ ){
-				Character c = new Character( new Vector2( int.Parse( lines[lineIt][0] ), int.Parse(lines[lineIt][1]) ));
+				Character c = new Character( new Vector2( int.Parse( lines[lineIt][0] ), int.Parse(lines[lineIt][1]) ), m );
 				if( m.checkCharacterPosition( c ) ){
 					m.addPlayer(c);
+				}
+				else{
+					Debug.LogError( "Map : the position of the player "+ i +" is incorrect." );
 				}
 				lineIt++;
 			}
@@ -250,9 +244,12 @@ public class Map {
 			int nEnemies = int.Parse( lines[lineIt][0] );
 			lineIt++;
 			for( int i=0; i<nEnemies; i++ ){
-				Character c = new Character( new Vector2( int.Parse( lines[lineIt][0] ), int.Parse(lines[lineIt][1]) ));
+				Character c = new Character( new Vector2( int.Parse( lines[lineIt][0] ), int.Parse(lines[lineIt][1]) ), m );
 				if( m.checkCharacterPosition( c ) ){
 					m.addEnemy(c);
+				}
+				else{
+					Debug.LogError( "Map : the position of the enemy "+i+" is incorrect." );
 				}
 				lineIt++;
 			}

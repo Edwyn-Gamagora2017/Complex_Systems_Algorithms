@@ -11,7 +11,7 @@ public class Main : MonoBehaviour {
 
 		Map m = Map.readFromFile( "Assets/Maps/map1.txt" );
 		Debug.Log (m.toString());
-		Debug.Log (m.getGraph.print());
+		//Debug.Log (m.getGraph.print());
 	}
 	
 	// Update is called once per frame

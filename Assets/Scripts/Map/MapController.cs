@@ -9,21 +9,25 @@ public class MapController : MonoBehaviour {
 	[SerializeField]
 	TextAsset mapFile;		// File that describes the map
 
-	[SerializeField]
-	MapView mapView;		// MapView component
-
 	// To be executed before the component starts
 	void Awake () {
 		// Create the map based on the file
 		if( this.mapFile != null ){
 			this.mapModel = Map.read( this.mapFile.text );
-			if( this.mapView != null ){
-				this.mapView.MapModel = this.mapModel;
+			if( this.GetComponent<MapView>() != null ){
+				this.GetComponent<MapView>().MapModel = this.mapModel;
 			}
 		}
 		else{
 			Debug.LogError( "MapView : mapFile not defined" );
 		}
+	}
+
+	public List<Character> getPlayers(){
+		return this.mapModel.Players;
+	}
+	public List<Character> getEnemies(){
+		return this.mapModel.Enemies;
 	}
 
 	// Use this for initialization
