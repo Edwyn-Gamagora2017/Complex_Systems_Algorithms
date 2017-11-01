@@ -10,6 +10,8 @@ public class MapView : MonoBehaviour {
 	[SerializeField]
 	GameObject mapContainer;	// Element that involve the map
 	[SerializeField]
+	Camera mapCamera;			// Camera that is responsable for showing the map
+	[SerializeField]
 	GameObject mapTilePrefab;	// Element that represents a mapTile
 	[SerializeField]
 	Sprite[] tileSprites;		// Sprites that are going to be used to show the tiles of the map. The index of the tileSprite matchs the Enum TileType
@@ -50,6 +52,11 @@ public class MapView : MonoBehaviour {
 				Map.MapTileType type = this.mapModel.getTileType( x,y );
 				this.createMapTile( type, x, y );
 			}
+		}
+		// Adjust the camera
+		if( mapCamera != null ){
+			mapCamera.transform.position = new Vector3( this.mapModel.Width/2f-0.5f, this.mapModel.Height/2f-0.5f, -1 );	// 0.5 is the size of a half of the tile
+			mapCamera.orthographicSize = Mathf.Max( this.mapModel.Width/2f, this.mapModel.Height/2f );
 		}
 	}
 }
