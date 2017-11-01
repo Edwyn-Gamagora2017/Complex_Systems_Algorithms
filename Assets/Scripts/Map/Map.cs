@@ -137,7 +137,7 @@ public class Map {
 
 		return res;
 	}
-	public static Map readFromFile( string fileName )
+	public static Map read( string content )
 	{
 		/*
 		 * File format :
@@ -145,7 +145,37 @@ public class Map {
 		 * Height *
 		 * 	[Width * MapTileType (index)]
 		*/
-		string path = "Assets/Maps/" + fileName;
+
+		// Reading Information
+		try{
+			string[] lines = content.Split('\n');
+
+			// initial info
+			string[] line = lines[0].Split(' ');
+			int height = int.Parse(line [0]);
+			int width = int.Parse(line [1]);
+			bool neighborhood4 = int.Parse(line [2]) == 1;
+			bool bidirectional = int.Parse(line [3]) == 1;
+
+			Map m = new Map(height, width, neighborhood4, bidirectional);
+
+			// Vertices
+			for (int i = 0; i < height; i++) {
+				string[] mapLine = lines[1+i].Split(' ');
+				for( int j = 0; j < width; j++ ){
+					m.addTile( j, i, Map.typeIndexToType( int.Parse(mapLine[j]) ) );
+				}
+			}
+
+			return m;
+		}catch( System.Exception ex ){
+			Debug.LogError ( "Error while opening the Map file : wrong format" );
+			return null;
+		}
+	}
+	public static Map readFromFile( string fileName )
+	{
+		string path = fileName;
 
 		// Starting Reader
 		System.IO.StreamReader reader;
@@ -158,30 +188,6 @@ public class Map {
 		}
 
 		// Reading Information
-		try{
-			// initial info
-			string[] line = reader.ReadLine().Split(' ');
-			int height = int.Parse(line [0]);
-			int width = int.Parse(line [1]);
-			bool neighborhood4 = int.Parse(line [2]) == 1;
-			bool bidirectional = int.Parse(line [3]) == 1;
-
-			Map m = new Map(height, width, neighborhood4, bidirectional);
-
-			// Vertices
-			for (int i = 0; i < height; i++) {
-				string[] mapLine = reader.ReadLine().Split(' ');
-				for( int j = 0; j < width; j++ ){
-					m.addTile( j, i, Map.typeIndexToType( int.Parse(mapLine[j]) ) );
-				}
-			}
-
-			reader.Close ();
-
-			return m;
-		}catch( System.Exception ex ){
-			Debug.LogError ( "Error while opening the Map file : wrong format" );
-			return null;
-		}
+		return Map.read( reader.ReadToEnd() );
 	}
 }

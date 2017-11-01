@@ -116,7 +116,8 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 724684282}
-  - component: {fileID: 724684283}
+  - component: {fileID: 724684284}
+  - component: {fileID: 724684285}
   m_Layer: 0
   m_Name: Main
   m_TagString: Untagged
@@ -137,7 +138,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &724684283
+--- !u!114 &724684284
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
@@ -145,9 +146,24 @@ MonoBehaviour:
   m_GameObject: {fileID: 724684281}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 975ff856f39afa7419dbb8e1e36b20fa, type: 3}
+  m_Script: {fileID: 11500000, guid: 2970eb3bc8be6744b80b8fdef171ad98, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mapContainer: {fileID: 0}
+  tileSprites: []
+--- !u!114 &724684285
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 724684281}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9eea9a3b1438d3e4d9ea3a82655baf37, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mapFile: {fileID: 4900000, guid: e4650d049dad5684d837cab034c2fda3, type: 3}
+  mapView: {fileID: 724684284}
 --- !u!1 &1026639669
 GameObject:
   m_ObjectHideFlags: 0

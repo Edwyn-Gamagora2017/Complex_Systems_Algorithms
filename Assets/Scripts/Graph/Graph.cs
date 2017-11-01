@@ -84,7 +84,7 @@ public class Graph {
 		 * nVertices * value
 		 * nEdges * ( v1, v2, weight)
 		*/
-		string path = "Assets/Graphs/" + fileName;
+		string path = fileName;
 
 		// Starting Reader
 		System.IO.StreamReader reader;
