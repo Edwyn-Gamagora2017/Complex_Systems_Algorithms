@@ -195,21 +195,29 @@ public class Map {
 
 		// Reading Information
 		try{
-			string[] lines = content.Split('\n');
+			string[] linesWithComments = content.Split('\n');
+			List<string[]> lines = new List<string[]>();
+			// filtering comments
+			for ( int i = 0; i < linesWithComments.Length; i++ ){
+				string[] lineSplitSpace = linesWithComments[i].Trim().Split(' ');
+				if( lineSplitSpace.Length > 0 && lineSplitSpace[0].Length > 0 && lineSplitSpace[0][0] != '#' ){
+					lines.Add( lineSplitSpace );
+				}
+			}
 
 			// initial info
-			string[] line = lines[0].Split(' ');
-			int height = int.Parse(line [0]);
-			int width = int.Parse(line [1]);
-			bool neighborhood4 = int.Parse(line [2]) == 1;
-			bool bidirectional = int.Parse(line [3]) == 1;
+			string[] infoline = lines[0];
+			int height = int.Parse(infoline [0]);
+			int width = int.Parse(infoline [1]);
+			bool neighborhood4 = int.Parse(infoline [2]) == 1;
+			bool bidirectional = int.Parse(infoline [3]) == 1;
 
 			// TODO players and enemies
 			Map m = new Map(height, width, null, null, neighborhood4, bidirectional);
 
 			// Vertices
 			for (int y = 0; y < height; y++) {
-				string[] mapLine = lines[1+y].Split(' ');
+				string[] mapLine = lines[1+y];
 				for( int x = 0; x < width; x++ ){
 					m.addTile( x, height-1-y, Map.typeIndexToType( int.Parse(mapLine[x]) ) );
 				}
