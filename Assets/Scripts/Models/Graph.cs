@@ -15,12 +15,14 @@ public class Graph {
 	};
 
 	bool bidirectional;
+	bool multipleEdge;
 	float[] vertices;
 	List<Adjacent>[] adjacency;	// List of adjacency
 
-	public Graph( int nVertices, bool bidirectional )
+	public Graph( int nVertices, bool bidirectional, bool multipleEdge )
 	{
 		this.bidirectional = bidirectional;
+		this.multipleEdge = multipleEdge;
 		// Setting Vertices
 		this.vertices = new float[nVertices];
 		for(int i=0; i<nVertices; i++) {
@@ -49,7 +51,7 @@ public class Graph {
 	}
 	public void setAdjacency( int indexA, int indexB, float value )
 	{
-		if ( this.isAdjacent (indexA, indexB) == null ) {
+		if ( this.isAdjacent (indexA, indexB) == null || this.multipleEdge ) {
 			this.adjacency [indexA].Add (new Adjacent( indexB, value ));
 			if (this.bidirectional) {
 				this.adjacency [indexB].Add (new Adjacent( indexA, value ));
@@ -78,7 +80,7 @@ public class Graph {
 	{
 		/*
 		 * File format :
-		 * nVertices nEdges 0|1(bidirectional)
+		 * nVertices nEdges 0|1(bidirectional) 0|1(multipleEdge)
 		 * nVertices * value
 		 * nEdges * ( v1, v2, weight)
 		*/
@@ -101,7 +103,8 @@ public class Graph {
 			int nV = int.Parse(line [0]);
 			int nE = int.Parse(line [1]);
 			bool bidirectional = int.Parse(line [2]) == 1;
-			Graph g = new Graph (nV, bidirectional);
+			bool multipleEdge = int.Parse(line [3]) == 1;
+			Graph g = new Graph (nV, bidirectional, multipleEdge);
 
 			// Vertices
 			for (int i = 0; i < nV; i++) {
