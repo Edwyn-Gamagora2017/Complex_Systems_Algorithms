@@ -1,0 +1,77 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &100100000
+Prefab:
+  m_ObjectHideFlags: 1
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications: []
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 0}
+  m_RootGameObject: {fileID: 1807432998176620}
+  m_IsPrefabParent: 1
+--- !u!1 &1807432998176620
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4998548567203602}
+  - component: {fileID: 114306645395109802}
+  - component: {fileID: 114326992449948472}
+  m_Layer: 0
+  m_Name: Map
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4998548567203602
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1807432998176620}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &114306645395109802
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1807432998176620}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2970eb3bc8be6744b80b8fdef171ad98, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mapContainer: {fileID: 1807432998176620}
+  mapTilePrefab: {fileID: 0}
+  tileSprites:
+  - {fileID: 21300000, guid: b5287b460f417ca45b9795d00e515837, type: 3}
+  - {fileID: 21300000, guid: 5600c4af5299eff48b1f63cd0053e7cd, type: 3}
+  - {fileID: 21300000, guid: 8bcc5e286e0b6e544a4e38d8c72f5a64, type: 3}
+  - {fileID: 21300000, guid: d5ea8777a62e9a441ab2108cdfce5022, type: 3}
+  - {fileID: 21300000, guid: 4312199e499c9be458a0771c083526aa, type: 3}
+--- !u!114 &114326992449948472
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1807432998176620}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9eea9a3b1438d3e4d9ea3a82655baf37, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mapFile: {fileID: 4900000, guid: e4650d049dad5684d837cab034c2fda3, type: 3}
+  mapView: {fileID: 114306645395109802}
+  players: []
+  enemies: []

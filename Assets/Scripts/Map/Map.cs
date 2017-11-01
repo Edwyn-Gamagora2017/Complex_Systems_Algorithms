@@ -18,7 +18,45 @@ public class Map {
 	private	Graph graph;				// the representation of the map as a graph
 	private bool neighborhood4;			// the map doesnt consider the diagonal for the neighborhood
 
-	public Map( int height, int width, bool neighborhood4, bool bidirectional ){
+	List<Character> players;			// Players
+	List<Character> enemies;			// Enemies
+
+	/* PROPERTIES */
+	public List<Character> Players {
+		get {
+			return players;
+		}
+		set {
+			players = value;
+		}
+	}
+	public List<Character> Enemies {
+		get {
+			return enemies;
+		}
+		set {
+			enemies = value;
+		}
+	}
+
+	public int Height {
+		get {
+			return height;
+		}
+	}
+	public int Width {
+		get {
+			return width;
+		}
+	}
+
+	public MapTileType[][] MapTiles {
+		get {
+			return mapTiles;
+		}
+	}
+
+	public Map( int height, int width, List<Character> players, List<Character> enemies, bool neighborhood4, bool bidirectional ){
 		this.generateMapTileValue();
 
 		this.height = height;
@@ -32,6 +70,8 @@ public class Map {
 				this.mapTiles[i][j] = MapTileType.NotDefined;
 			}
 		}
+		this.players = players;
+		this.enemies = enemies;
 		this.neighborhood4 = neighborhood4;
 
 		// Each tile is a vertex in the graph
@@ -87,8 +127,7 @@ public class Map {
 		}
 	}
 
-	public bool isValidTilePosition( int x, int y )
-	{
+	public bool isValidTilePosition( int x, int y ){
 		return( y >= 0 && y < this.height && x >= 0 && x < this.width );
 	}
 	public bool isDefinedTile( int x, int y ){
@@ -119,6 +158,14 @@ public class Map {
 	public Graph getGraph {
 		get {
 			return graph;
+		}
+	}
+	public MapTileType getTileType(int x, int y){
+		if( this.isValidTilePosition(x,y) ){
+			return this.mapTiles[y][x];
+		}
+		else{
+			return MapTileType.NotDefined;
 		}
 	}
 
@@ -157,13 +204,14 @@ public class Map {
 			bool neighborhood4 = int.Parse(line [2]) == 1;
 			bool bidirectional = int.Parse(line [3]) == 1;
 
-			Map m = new Map(height, width, neighborhood4, bidirectional);
+			// TODO players and enemies
+			Map m = new Map(height, width, null, null, neighborhood4, bidirectional);
 
 			// Vertices
-			for (int i = 0; i < height; i++) {
-				string[] mapLine = lines[1+i].Split(' ');
-				for( int j = 0; j < width; j++ ){
-					m.addTile( j, i, Map.typeIndexToType( int.Parse(mapLine[j]) ) );
+			for (int y = 0; y < height; y++) {
+				string[] mapLine = lines[1+y].Split(' ');
+				for( int x = 0; x < width; x++ ){
+					m.addTile( x, height-1-y, Map.typeIndexToType( int.Parse(mapLine[x]) ) );
 				}
 			}
 
