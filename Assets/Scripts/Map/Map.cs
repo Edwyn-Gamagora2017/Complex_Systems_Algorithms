@@ -186,6 +186,9 @@ public class Map {
 	private bool checkCharacterPosition( Character c ){
 		return this.isUsefulPosition( getCharacterPositionX(c), getCharacterPositionY(c) );
 	}
+	public float getCharacterPositionCost( Character c ){
+		return this.mapTiles[ getCharacterPositionY(c) ][ getCharacterPositionX(c) ].VertexCost;
+	}
 	public void addPlayer( Character player ){
 		this.players.Add( player );
 	}

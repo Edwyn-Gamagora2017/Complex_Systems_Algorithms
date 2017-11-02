@@ -34,6 +34,9 @@ public class MapController : MonoBehaviour {
 	public List<Character> getEnemies(){
 		return this.mapModel.Enemies;
 	}
+	public float getCharacterPositionCost( Character c ){
+		return this.mapModel.getCharacterPositionCost( c );
+	}
 
 	public void FindPathAstar( Character enemy ){
 		this.mapModel.findPathAstar( enemy );

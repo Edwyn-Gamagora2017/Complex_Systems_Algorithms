@@ -6,7 +6,7 @@ public class EnemyController : Character_Controller {
 
 	// Game Settings
 	[SerializeField]
-	int enemyMoveTimeInSec = 10;	// Interval in which enemy's movement is executed
+	int enemyMoveTimeInSec = 1;	// Interval in which enemy's movement is executed
 	[SerializeField]
 	bool enemyMoveEnabled = true;	// Indicates if the enemy's movement is enabled
 	[SerializeField]
@@ -34,11 +34,13 @@ public class EnemyController : Character_Controller {
 		base.Update();
 
 		if( enemyMovementTimer <= 0 ){
-			enemyMovementTimer = enemyMoveTimeInSec;
 			executeMovement();
+			this.enemyMovementTimer = enemyMoveTimeInSec*(this.map.getCharacterPositionCost( this.model )+1);
 		}
 		else{
-			enemyMovementTimer -= Time.deltaTime;
+			if( this.enemyMoveEnabled ){
+				enemyMovementTimer -= Time.deltaTime;
+			}
 		}
 	}
 
@@ -51,6 +53,7 @@ public class EnemyController : Character_Controller {
 		List<PathVertexInfo> path = (this.moveAstar?pathAstar:pathDijkstra);
 		if( path != null && path.Count > 1 && enemyMoveEnabled ){
 			Map.TileInfo v = ((Map.TileInfo)path[ path.Count-2 ].Vertex);
+			// Consider edge cost
 			this.model.move( v.x, v.y );
 		}
 		// Showing the path found
