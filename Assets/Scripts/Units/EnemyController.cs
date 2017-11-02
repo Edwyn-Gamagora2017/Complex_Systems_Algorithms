@@ -43,6 +43,10 @@ public class EnemyController : Character_Controller {
 		// Find Path
 		Debug.Log("Find Path");
 		List<PathVertexInfo> path = this.model.findPath();
+		// Move enemy
+		if( path != null && path.Count > 1){
+			this.model.move( ((Map.TileInfo)path[ path.Count-2 ].Vertex).x, ((Map.TileInfo)path[ path.Count-2 ].Vertex).y );
+		}
 		// Showing the path found
 		if( this.showPathFlag ){
 			this.map.includePath( path, this.model );

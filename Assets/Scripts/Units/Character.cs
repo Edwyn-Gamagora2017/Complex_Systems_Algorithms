@@ -30,7 +30,7 @@ public class Character {
 	}
 
 	// Character Movements
-	private void move(float newX, float newY){
+	public void move(float newX, float newY){
 		this.map.characterMove( this, newX, newY );
 	}
 	public void moveDown(){

@@ -81,8 +81,8 @@ public class MapView : MonoBehaviour {
 	private void showPath( List<PathVertexInfo> path, Color color ){
 		string resPath = "";
 
-		foreach( PathVertexInfo v in path ){
-			Map.TileInfo vertexInfo = (Map.TileInfo)v.Vertex;
+		for(int i=0; i < path.Count-1; i++ ){
+			Map.TileInfo vertexInfo = (Map.TileInfo)path[i].Vertex;
 			resPath += vertexInfo.VertexIndex+": (x:"+vertexInfo.x+","+vertexInfo.y+")\n";
 			GameObject tile = this.tileGameObjects[ new KeyValuePair<int,int>( vertexInfo.y, vertexInfo.x ) ];
 			if( tile != null ){
