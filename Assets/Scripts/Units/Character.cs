@@ -15,12 +15,10 @@ public class Character {
 	public Vector2 positionInTheMap(){
 		return this.map.getCharacterPosition(this);
 	}
-
-	public Vector2 Pos {
-		set {
-			pos = value;
-		}
+	public void findPath(){
+		this.map.findPath( this );
 	}
+
 	public float getPosX(){
 		return this.pos.x;
 	}

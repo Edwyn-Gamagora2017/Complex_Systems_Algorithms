@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CharacterController : MonoBehaviour {
+public class Character_Controller : MonoBehaviour {
 
-	private Character model; // Stores the Character Model values
+	protected Character model; // Stores the Character Model values
 
 	public Character Model {
 		set {
@@ -14,12 +14,12 @@ public class CharacterController : MonoBehaviour {
 	}
 
 	// Use this for initialization
-	protected void Start () {
+	protected virtual void Start () {
 
 	}
 
 	// Update is called once per frame
-	protected void Update () {
+	protected virtual void Update () {
 
 	}
 }

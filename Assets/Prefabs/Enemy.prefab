@@ -65,6 +65,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c00aab3b207ce242a256fe2891deeea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemyMoveTimeInSec: 10
+  enemyMoveEnabled: 1
 --- !u!212 &212112381692986512
 SpriteRenderer:
   m_ObjectHideFlags: 1

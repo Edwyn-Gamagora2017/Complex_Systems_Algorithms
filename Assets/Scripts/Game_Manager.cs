@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameManager : MonoBehaviour {
+public class Game_Manager : MonoBehaviour {
 
 	[SerializeField]
 	GameObject map;				// Map Controller and View

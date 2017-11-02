@@ -25,19 +25,15 @@ public class Map {
 	// Class to be used to store a vertex in the graph
 	public class TileInfo : VertexInfo{
 		// Map
-		public float weight;
-		public MapTileType type;
-		public int x;
-		public int y;
-		// Graph
-		public float distance;
+		public MapTileType type;	// type of the tile
+		public int x;				// position of the tile in the map : X component
+		public int y;				// position of the tile in the map : Y component
 
 		public TileInfo( int x, int y, MapTileType type, int index ) : base(index){
 			this.x = x;
 			this.y = y;
-			this.weight = Map.mapTileTypeWeight( type );
+			this.vertexCost = Map.mapTileTypeWeight( type );
 			this.type = type;
-			this.distance = -1;
 		}
 
 		// Graph
@@ -47,7 +43,7 @@ public class Map {
 		}
 		public override string toString ()
 		{
-			return "{ x : "+this.x.ToString()+"; y : "+this.y.ToString()+"; weight : "+this.weight.ToString()+"}";
+			return "{ x : "+this.x.ToString()+"; y : "+this.y.ToString()+"; weight : "+this.vertexCost.ToString()+"}";
 		}
 	};
 
@@ -191,6 +187,17 @@ public class Map {
 		this.enemies.Add( enemy );
 	}
 
+	/*
+	 * PATH FINDING
+	 */
+	public void findPath( Character enemy ){
+		Vector2 enemyPos = this.getCharacterPosition( enemy );
+		if( this.players.Count > 0 ){
+			Vector2 targetPos = this.getCharacterPosition( this.players[0] );
+			this.graph.aStar( this.graphIndexFromTile( (int)enemyPos.x, (int)enemyPos.y ), this.graphIndexFromTile( (int)targetPos.x, (int)targetPos.y ) );
+		}
+	}
+
 	public string toString()
 	{
 		string res = "Map : {\nheight = "+this.height.ToString ()+"\nwidth = "+this.width.ToString ()+"\n";
@@ -198,10 +205,10 @@ public class Map {
 		{
 			for( int j=0; j<this.width; j++ )
 			{
-				res += this.mapTiles[i][j].ToString()+":"+Map.mapTileTypeWeight(this.mapTiles[i][j].type).ToString()+" ";
+				res += "["+this.mapTiles[i][j].VertexIndex+": ("+this.mapTiles[i][j].x+","+this.mapTiles[i][j].y+") "+this.mapTiles[i][j].VertexCost+"]\n";
 			}
-			res += "\n";
 		}
+		res += this.graph.toString();
 		res += "}\n";
 
 		return res;

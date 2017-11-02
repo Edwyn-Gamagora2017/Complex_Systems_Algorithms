@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CharacterView : MonoBehaviour {
 
-	Character characterModel;	// Character Model
+	protected Character characterModel;	// Character Model
 
 	[SerializeField]
 	Sprite spriteCharacter;			// Sprite that presents the character
@@ -16,14 +16,14 @@ public class CharacterView : MonoBehaviour {
 	}
 
 	// Use this for initialization
-	protected void Start () {
+	protected virtual void Start () {
 		GetComponent<SpriteRenderer>().sprite = spriteCharacter;
 	}
 	
 	// Update is called once per frame
-	protected void Update () {
+	protected virtual void Update () {
 		// updating position
 		Vector2 pos = characterModel.positionInTheMap();
-		transform.position = new Vector3( pos.x, pos.y, 0 );
+		transform.position = new Vector3( pos.x, pos.y, -0.1f );
 	}
 }

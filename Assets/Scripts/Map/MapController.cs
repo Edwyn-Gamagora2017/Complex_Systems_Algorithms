@@ -30,6 +30,10 @@ public class MapController : MonoBehaviour {
 		return this.mapModel.Enemies;
 	}
 
+	public void FindPath( Character enemy ){
+		this.mapModel.findPath( enemy );
+	}
+
 	// Use this for initialization
 	void Start () {
 		
