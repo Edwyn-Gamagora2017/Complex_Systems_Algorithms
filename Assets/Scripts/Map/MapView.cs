@@ -36,7 +36,7 @@ public class MapView : MonoBehaviour {
 		GameObject result = null;
 		if( type != Map.MapTileType.NotDefined ){
 			result = GameObject.Instantiate( mapTilePrefab, mapContainer.transform );
-			result.transform.position = new Vector3(x,y);
+			result.GetComponent<MapTileView>().setPosition( x, y );
 			result.GetComponent<MapTileView>().setType( type );
 		}
 		return result;

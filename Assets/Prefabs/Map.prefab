@@ -54,7 +54,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mapContainer: {fileID: 1807432998176620}
   mapCamera: {fileID: 0}
-  mapTilePrefab: {fileID: 1645640466211838, guid: b0c3dbb1053c1f841855c423cfdb07e0,
+  mapTilePrefab: {fileID: 1316561900394314, guid: f8f71235f73c35a44b36cb930feb9252,
     type: 2}
 --- !u!114 &114326992449948472
 MonoBehaviour:

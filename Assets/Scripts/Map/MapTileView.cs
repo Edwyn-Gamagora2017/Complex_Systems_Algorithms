@@ -9,6 +9,8 @@ public class MapTileView : MonoBehaviour {
 	[SerializeField]
 	Sprite[] tileSprites;		// Sprites that are going to be used to show the tiles of the map. The index of the tileSprite matchs the Enum TileType
 	// TODO create a custom Unity inspector for the tile sprite
+	[SerializeField]
+	UnityEngine.UI.Image tileImage;	// Image used to show the tile sprite
 
 	// Use this for initialization
 	void Start () {
@@ -21,6 +23,11 @@ public class MapTileView : MonoBehaviour {
 
 	public void setType( Map.MapTileType type ){
 		this.type = type;
-		GetComponent<SpriteRenderer>().sprite = tileSprites[ Map.typeToTypeIndex( this.type ) ];
+		if( this.type != Map.MapTileType.NotDefined ){
+			tileImage.sprite = tileSprites[ Map.typeToTypeIndex( this.type ) ];
+		}
+	}
+	public void setPosition( float x, float y ){
+		transform.position = new Vector3(x,y,0);
 	}
 }

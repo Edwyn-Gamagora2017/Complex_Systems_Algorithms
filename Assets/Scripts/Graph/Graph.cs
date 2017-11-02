@@ -29,11 +29,13 @@ public abstract class VertexInfo{
 // Class that determines necessary Vertex information to graph algorithms to path finding, such as A* algorithm
 public class PathVertexInfo{
 	private VertexInfo vertex;			// Vertex associated to the information
+	private PathVertexInfo previousVertex;	// the previous Vertex in the path
 	private float distanceToVertex;		// Distance acumulated until arriving to the vertex
 	private bool visited;				// Idicates if the vertex was processed by the algorithms
 
 	public PathVertexInfo( VertexInfo vertex, float distanceToVertex = 0 ){
 		this.vertex = vertex;
+		this.previousVertex = null;
 		this.distanceToVertex = distanceToVertex;
 		this.visited = false;
 	}
@@ -54,6 +56,16 @@ public class PathVertexInfo{
 			visited = value;
 		}
 	}
+	public PathVertexInfo PreviousVertex {
+		set {
+			previousVertex = value;
+		}
+	}
+	public int PreviousVertexIndex {
+		get {
+			return previousVertex.VertexIndex;
+		}
+	}
 	public int VertexIndex {
 		get {
 			return vertex.VertexIndex;
@@ -67,6 +79,18 @@ public class PathVertexInfo{
 	// Distance to the target predicted by the heuristics
 	public float distanceToTarget( VertexInfo target ){
 		return this.DistanceToVertex + this.vertex.distanceTo( target );
+	}
+	// Obtains the path to achieve the vertex
+	public List<PathVertexInfo> pathTo(){
+		List<PathVertexInfo> result = new List<PathVertexInfo>();
+		PathVertexInfo current = this;
+
+		while( current != null ){
+			result.Add( current );
+			current = current.previousVertex;
+		}
+
+		return result;
 	}
 };
 
@@ -205,6 +229,7 @@ public class Graph {
 					if( !info[ neighbor.index ].Visited && !vertexAlreadyInList( neighbor.index, open ) ){
 						PathVertexInfo neighborVertex = info[ neighbor.index ];
 						neighborVertex.DistanceToVertex = currentVertex.DistanceToVertex + neighborVertex.VertexCost;
+						neighborVertex.PreviousVertex = currentVertex;
 						// Add neighbor
 						open.Add( neighborVertex );
 					}
