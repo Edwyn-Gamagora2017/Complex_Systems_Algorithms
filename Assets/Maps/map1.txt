@@ -12,20 +12,24 @@
 0 0 0 0 0 0 0 0
 0 1 0 1 1 1 1 0
 0 1 0 1 1 1 0 0
-0 1 4 2 2 1 0 0
+0 1 1 2 2 1 0 0
 0 1 4 2 2 2 2 0
 0 3 4 0 0 0 0 0
-0 3 3 3 3 3 3 0
-0 3 0 3 3 3 3 0
+0 3 3 3 4 3 3 0
+0 3 0 3 4 3 3 0
 0 3 0 3 3 3 3 0
 0 0 0 0 0 0 0 0
 
 # player amount
 1
 # player x y
-5 2
+# 5 2
+3 6
 
 # enemy amount
-1
+2
 # enemy x y
 5 7
+1 1
+
+# difference between dijkstra and Astar when player is at 3 6
