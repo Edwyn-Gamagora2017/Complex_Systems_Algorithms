@@ -11,6 +11,8 @@ public class MapTileView : MonoBehaviour {
 	// TODO create a custom Unity inspector for the tile sprite
 	[SerializeField]
 	UnityEngine.UI.Image tileImage;	// Image used to show the tile sprite
+	[SerializeField]
+	UnityEngine.UI.Image isPathImage;	// Image used to show that the tile is part of the path
 
 	// Use this for initialization
 	void Start () {
@@ -30,7 +32,15 @@ public class MapTileView : MonoBehaviour {
 	public void setPosition( float x, float y ){
 		transform.position = new Vector3(x,y,0);
 	}
+	public void hidePath( Color color ){
+		if( isPathImage != null ){
+			isPathImage.gameObject.SetActive( false );
+		}
+	}
 	public void showPath( Color color ){
-		tileImage.color = color;
+		if( isPathImage != null ){
+			isPathImage.gameObject.SetActive( true );
+			isPathImage.color = color;
+		}
 	}
 }
