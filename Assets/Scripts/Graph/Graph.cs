@@ -234,7 +234,7 @@ public class Graph {
 				foreach( Adjacent neighbor in this.adjacency[ currentVertex.VertexIndex ] ){
 					if( !info[ neighbor.index ].Visited && !vertexAlreadyInList( neighbor.index, open ) ){
 						PathVertexInfo neighborVertex = info[ neighbor.index ];
-						neighborVertex.DistanceToVertex = currentVertex.DistanceToVertex + neighborVertex.VertexCost;
+						neighborVertex.DistanceToVertex = currentVertex.DistanceToVertex + neighbor.edgeWeight + neighborVertex.VertexCost;
 						neighborVertex.PreviousVertex = currentVertex;
 						// Add neighbor
 						open.Add( neighborVertex );
