@@ -66,6 +66,11 @@ public class PathVertexInfo{
 			return previousVertex.VertexIndex;
 		}
 	}
+	public VertexInfo Vertex {
+		get {
+			return vertex;
+		}
+	}
 	public int VertexIndex {
 		get {
 			return vertex.VertexIndex;
@@ -202,6 +207,7 @@ public class Graph {
 	}
 	// Calculates the smallest path between Origin and Target
 	public PathVertexInfo aStar( int vertexOriginIndex, int vertexTargetIndex ){
+		Debug.Log(this.toString());
 		// Check if the arguments are valid vertices
 		if( this.isValidVertexIndex( vertexOriginIndex ) || this.isValidVertexIndex( vertexTargetIndex ) ){
 			// Create list of information necessary to the algorithm

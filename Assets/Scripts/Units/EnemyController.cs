@@ -11,7 +11,15 @@ public class EnemyController : Character_Controller {
 	bool enemyMoveEnabled = true;	// Indicates if the enemy's movement is enabled
 	private float enemyMovementTimer = 0;	// Timer for enemy's movement
 
-	private MapController map;				// Controller to interact to the Map
+	private MapController map;		// Controller to interact to the Map
+	public MapController Map {
+		set {
+			map = value;
+		}
+	}
+
+	// Settings
+	private bool showPathFlag = true;				// Indicates if the map shows some path
 
 	// Use this for initialization
 	protected override void Start () {
@@ -32,7 +40,12 @@ public class EnemyController : Character_Controller {
 	}
 
 	void executeMovement(){
+		// Find Path
 		Debug.Log("Find Path");
-		//this.model.findPath();
+		List<PathVertexInfo> path = this.model.findPath();
+		// Showing the path found
+		if( this.showPathFlag ){
+			this.map.showPath( path, new Color(1,0,0) );
+		}
 	}
 }

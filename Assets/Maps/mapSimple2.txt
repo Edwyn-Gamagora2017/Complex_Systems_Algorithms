@@ -1,0 +1,26 @@
+# Types
+# 0 Wall
+# 1 Grass
+# 2 Water
+# 3 Rock
+# 4 Mud
+
+# Map format: H W 4neighborhood bidirectional
+5 4 1 1
+
+# Map format: types ( 0,0 -> bottom left )
+0 0 0 0
+0 1 1 0
+0 1 0 0
+0 1 1 0
+0 0 0 0
+
+# player amount
+1
+# player x y
+2 1
+
+# enemy amount
+1
+# enemy x y
+2 3

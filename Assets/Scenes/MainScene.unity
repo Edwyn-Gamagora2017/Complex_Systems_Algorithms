@@ -260,7 +260,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1447819997}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 975ff856f39afa7419dbb8e1e36b20fa, type: 3}
   m_Name: 
@@ -309,6 +309,11 @@ Prefab:
       propertyPath: mapCamera
       value: 
       objectReference: {fileID: 1026639673}
+    - target: {fileID: 114326992449948472, guid: 26d35d89b0a5829418f34058e1117f00,
+        type: 2}
+      propertyPath: mapFile
+      value: 
+      objectReference: {fileID: 4900000, guid: e4650d049dad5684d837cab034c2fda3, type: 3}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 26d35d89b0a5829418f34058e1117f00, type: 2}
   m_IsPrefabParent: 0

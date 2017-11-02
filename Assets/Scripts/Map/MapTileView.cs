@@ -30,4 +30,7 @@ public class MapTileView : MonoBehaviour {
 	public void setPosition( float x, float y ){
 		transform.position = new Vector3(x,y,0);
 	}
+	public void showPath( Color color ){
+		tileImage.color = color;
+	}
 }

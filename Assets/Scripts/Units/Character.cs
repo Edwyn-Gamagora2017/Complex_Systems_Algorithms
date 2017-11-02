@@ -15,8 +15,8 @@ public class Character {
 	public Vector2 positionInTheMap(){
 		return this.map.getCharacterPosition(this);
 	}
-	public void findPath(){
-		this.map.findPath( this );
+	public List<PathVertexInfo> findPath(){
+		return this.map.findPath( this );
 	}
 
 	public float getPosX(){

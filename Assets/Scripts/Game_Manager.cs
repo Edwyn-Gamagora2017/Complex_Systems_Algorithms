@@ -30,6 +30,7 @@ public class Game_Manager : MonoBehaviour {
 			foreach( Character c in this.map.GetComponent<MapController>().getEnemies() ){
 				GameObject enemy = GameObject.Instantiate( enemyPrefab, this.transform );
 				enemy.GetComponent<EnemyController>().Model = c;
+				enemy.GetComponent<EnemyController>().Map = this.map.GetComponent<MapController>();
 				this.enemies.Add( enemy );
 			}
 		}

@@ -33,6 +33,11 @@ public class MapController : MonoBehaviour {
 	public void FindPath( Character enemy ){
 		this.mapModel.findPath( enemy );
 	}
+	public void showPath( List<PathVertexInfo> path, Color color ){
+		if( this.GetComponent<MapView>() != null ){
+			this.GetComponent<MapView>().showPath( path, color );
+		}
+	}
 
 	// Use this for initialization
 	void Start () {

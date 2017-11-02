@@ -113,35 +113,37 @@ public class Map {
 		if( this.isValidTilePosition(x,y) ){
 			TileInfo info = new TileInfo( x, y, type, this.graphIndexFromTile(x,y));
 			this.mapTiles[y][x] = info;
-			this.graph.setVertex( info.VertexIndex, new TileInfo( x, y, type, info.VertexIndex ) );
+			this.graph.setVertex( info.VertexIndex, info );
 
 			// create graph edges
+			if( this.isUsefulPosition( x,y ) ){	// avoid wall to create edges
 				// neighborhood 4 - applied to everyone
-			if( this.isUsefulPosition( x,y-1 ) ){ // UP
-				this.graph.setAdjacency( this.graphIndexFromTile(x,y),this.graphIndexFromTile(x,y-1),1 );
-			}
-			if( this.isUsefulPosition( x,y+1 ) ){ // DOWN
-				this.graph.setAdjacency( this.graphIndexFromTile(x,y),this.graphIndexFromTile(x,y+1),1 );
-			}
-			if( this.isUsefulPosition( x-1,y ) ){ // LEFT
-				this.graph.setAdjacency( this.graphIndexFromTile(x,y),this.graphIndexFromTile(x-1,y),1 );
-			}
-			if( this.isUsefulPosition( x+1,y ) ){ // RIGHT
-				this.graph.setAdjacency( this.graphIndexFromTile(x,y),this.graphIndexFromTile(x+1,y),1 );
-			}
-				// neighborhood 8
-			if( !this.neighborhood4 ){
-				if( this.isUsefulPosition( x-1,y-1 ) ){ // UP LEFT
-					this.graph.setAdjacency( this.graphIndexFromTile(x,y),this.graphIndexFromTile(x-1,y-1),1 );
+				if( this.isUsefulPosition( x,y-1 ) ){ // UP
+					this.graph.setAdjacency( this.graphIndexFromTile(x,y),this.graphIndexFromTile(x,y-1),1 );
 				}
-				if( this.isUsefulPosition( x-1,y+1 ) ){ // DOWN LEFT 
-					this.graph.setAdjacency( this.graphIndexFromTile(x,y),this.graphIndexFromTile(x-1,y+1),1 );
+				if( this.isUsefulPosition( x,y+1 ) ){ // DOWN
+					this.graph.setAdjacency( this.graphIndexFromTile(x,y),this.graphIndexFromTile(x,y+1),1 );
 				}
-				if( this.isUsefulPosition( x+1,y-1 ) ){ // UP RIGHT
-					this.graph.setAdjacency( this.graphIndexFromTile(x,y),this.graphIndexFromTile(x+1,y-1),1 );
+				if( this.isUsefulPosition( x-1,y ) ){ // LEFT
+					this.graph.setAdjacency( this.graphIndexFromTile(x,y),this.graphIndexFromTile(x-1,y),1 );
 				}
-				if( this.isUsefulPosition( x+1,y+1 ) ){ // DOWN RIGHT
-					this.graph.setAdjacency( this.graphIndexFromTile(x,y),this.graphIndexFromTile(x+1,y+1),1 );
+				if( this.isUsefulPosition( x+1,y ) ){ // RIGHT
+					this.graph.setAdjacency( this.graphIndexFromTile(x,y),this.graphIndexFromTile(x+1,y),1 );
+				}
+					// neighborhood 8
+				if( !this.neighborhood4 ){
+					if( this.isUsefulPosition( x-1,y-1 ) ){ // UP LEFT
+						this.graph.setAdjacency( this.graphIndexFromTile(x,y),this.graphIndexFromTile(x-1,y-1),1 );
+					}
+					if( this.isUsefulPosition( x-1,y+1 ) ){ // DOWN LEFT 
+						this.graph.setAdjacency( this.graphIndexFromTile(x,y),this.graphIndexFromTile(x-1,y+1),1 );
+					}
+					if( this.isUsefulPosition( x+1,y-1 ) ){ // UP RIGHT
+						this.graph.setAdjacency( this.graphIndexFromTile(x,y),this.graphIndexFromTile(x+1,y-1),1 );
+					}
+					if( this.isUsefulPosition( x+1,y+1 ) ){ // DOWN RIGHT
+						this.graph.setAdjacency( this.graphIndexFromTile(x,y),this.graphIndexFromTile(x+1,y+1),1 );
+					}
 				}
 			}
 		}
@@ -190,12 +192,16 @@ public class Map {
 	/*
 	 * PATH FINDING
 	 */
-	public void findPath( Character enemy ){
+	public List<PathVertexInfo> findPath( Character enemy ){
 		Vector2 enemyPos = this.getCharacterPosition( enemy );
 		if( this.players.Count > 0 ){
 			Vector2 targetPos = this.getCharacterPosition( this.players[0] );
-			this.graph.aStar( this.graphIndexFromTile( (int)enemyPos.x, (int)enemyPos.y ), this.graphIndexFromTile( (int)targetPos.x, (int)targetPos.y ) );
+			PathVertexInfo targetPathInfo = this.graph.aStar( this.graphIndexFromTile( (int)enemyPos.x, (int)enemyPos.y ), this.graphIndexFromTile( (int)targetPos.x, (int)targetPos.y ) );
+			if( targetPathInfo != null ){
+				return targetPathInfo.pathTo();
+			}
 		}
+		return null;
 	}
 
 	public string toString()
