@@ -6,7 +6,7 @@
 # 4 Mud
 
 # Map format: H W 4neighborhood bidirectional
-10 8 1 1
+10 8 0 1
 
 # Map format: types ( 0,0 -> bottom left )
 0 0 0 0 0 0 0 0

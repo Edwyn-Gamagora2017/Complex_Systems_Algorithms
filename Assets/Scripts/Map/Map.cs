@@ -132,17 +132,18 @@ public class Map {
 				}
 					// neighborhood 8
 				if( !this.neighborhood4 ){
+					float edgeWeight = Mathf.Sqrt( 2 );	// sqrt 1*1+1*1
 					if( this.isUsefulPosition( x-1,y-1 ) ){ // UP LEFT
-						this.graph.setAdjacency( this.graphIndexFromTile(x,y),this.graphIndexFromTile(x-1,y-1),1 );
+						this.graph.setAdjacency( this.graphIndexFromTile(x,y),this.graphIndexFromTile(x-1,y-1), edgeWeight );
 					}
 					if( this.isUsefulPosition( x-1,y+1 ) ){ // DOWN LEFT 
-						this.graph.setAdjacency( this.graphIndexFromTile(x,y),this.graphIndexFromTile(x-1,y+1),1 );
+						this.graph.setAdjacency( this.graphIndexFromTile(x,y),this.graphIndexFromTile(x-1,y+1), edgeWeight );
 					}
 					if( this.isUsefulPosition( x+1,y-1 ) ){ // UP RIGHT
-						this.graph.setAdjacency( this.graphIndexFromTile(x,y),this.graphIndexFromTile(x+1,y-1),1 );
+						this.graph.setAdjacency( this.graphIndexFromTile(x,y),this.graphIndexFromTile(x+1,y-1), edgeWeight );
 					}
 					if( this.isUsefulPosition( x+1,y+1 ) ){ // DOWN RIGHT
-						this.graph.setAdjacency( this.graphIndexFromTile(x,y),this.graphIndexFromTile(x+1,y+1),1 );
+						this.graph.setAdjacency( this.graphIndexFromTile(x,y),this.graphIndexFromTile(x+1,y+1), edgeWeight );
 					}
 				}
 			}
