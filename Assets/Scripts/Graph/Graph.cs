@@ -179,6 +179,15 @@ public class Graph {
 		}
 		return false;
 	}
+	// Check if the vertex was inserted in a list of vertexDistance
+	private bool vertexAlreadyInList(int vertexIndex, List<PathVertexInfo> list){
+		foreach( PathVertexInfo v in list ){
+			if( v.VertexIndex == vertexIndex ){
+				return true;
+			}
+		}
+		return false;
+	}
 	// A* algorithm : Obtains the smallest distance in the list (remove it from the list). It considers the target
 	private PathVertexInfo getSmallest(List<PathVertexInfo> list, VertexInfo target){
 		if( list.Count > 0 ){
@@ -196,18 +205,9 @@ public class Graph {
 		}
 		return null;
 	}
-	// Check if the vertex was inserted in a list of vertexDistance
-	private bool vertexAlreadyInList(int vertexIndex, List<PathVertexInfo> list){
-		foreach( PathVertexInfo v in list ){
-			if( v.VertexIndex == vertexIndex ){
-				return true;
-			}
-		}
-		return false;
-	}
 	// Calculates the smallest path between Origin and Target
 	public PathVertexInfo aStar( int vertexOriginIndex, int vertexTargetIndex ){
-		Debug.Log(this.toString());
+		// Debug.Log(this.toString());
 		// Check if the arguments are valid vertices
 		if( this.isValidVertexIndex( vertexOriginIndex ) || this.isValidVertexIndex( vertexTargetIndex ) ){
 			// Create list of information necessary to the algorithm
@@ -243,6 +243,76 @@ public class Graph {
 
 				// Updating current
 				currentVertex = this.getSmallest( open, this.vertices[ vertexTargetIndex ] );
+			}
+
+			// Result
+			if( currentVertex != null && currentVertex.VertexIndex == vertexTargetIndex ){
+				return info[ vertexTargetIndex ];
+			}
+		}
+		return null;
+	}
+
+	// Dijkstra : Obtains the smallest distance in the list (remove it from the list)
+	private PathVertexInfo getSmallest(List<PathVertexInfo> list ){
+		if( list.Count > 0 ){
+			int resultIndex = -1;
+			for(int i=0; i<list.Count; i++){
+				if( resultIndex == -1 || list[resultIndex].DistanceToVertex > list[i].DistanceToVertex ){
+					resultIndex = i;
+				}
+			}
+			if( resultIndex > -1 ){
+				PathVertexInfo result = list[resultIndex];
+				list.RemoveAt( resultIndex );
+				return result;
+			}
+		}
+		return null;
+	}
+	// Calculates the smallest path between Origin and Target
+	public PathVertexInfo dijkstra( int vertexOriginIndex, int vertexTargetIndex ){
+		//Debug.Log(this.toString());
+		// Check if the arguments are valid vertices
+		if( this.isValidVertexIndex( vertexOriginIndex ) || this.isValidVertexIndex( vertexTargetIndex ) ){
+			// Create list of information necessary to the algorithm
+			Dictionary<int,PathVertexInfo> info = new Dictionary<int, PathVertexInfo>();
+			foreach( VertexInfo vertex in this.vertices ){
+				info.Add( vertex.VertexIndex, new PathVertexInfo( vertex, float.MaxValue ) );
+			}
+			// Initialize the list of neighbors
+			List<PathVertexInfo> open = new List<PathVertexInfo>();
+
+			// First Element
+			info[ vertexOriginIndex ].DistanceToVertex = this.vertices[ vertexOriginIndex ].VertexCost;
+			open.Add( info[ vertexOriginIndex ] );
+
+			PathVertexInfo currentVertex = this.getSmallest( open );
+
+			// Calculate the neighbors
+			while( currentVertex != null && currentVertex.VertexIndex != vertexTargetIndex ){
+
+				// Informing that this vertex was processed
+				currentVertex.Visited = true;
+
+				// Inserting Neighbors
+				foreach( Adjacent neighbor in this.adjacency[ currentVertex.VertexIndex ] ){
+					if( !info[ neighbor.index ].Visited ){
+						PathVertexInfo neighborVertex = info[ neighbor.index ];
+						float newDistance = currentVertex.DistanceToVertex + neighbor.edgeWeight + neighborVertex.VertexCost;
+						if( neighborVertex.DistanceToVertex > newDistance ){
+							neighborVertex.DistanceToVertex = newDistance;
+							neighborVertex.PreviousVertex = currentVertex;
+						}
+						// Add neighbor
+						if( !vertexAlreadyInList( neighbor.index, open ) ){
+							open.Add( neighborVertex );
+						}
+					}
+				}
+
+				// Updating current
+				currentVertex = this.getSmallest( open );
 			}
 
 			// Result

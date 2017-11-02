@@ -8,7 +8,7 @@ public class MapView : MonoBehaviour {
 
 	Dictionary<KeyValuePair<int,int>, GameObject> tileGameObjects;	// Tile GameObjects
 
-	List<List<PathVertexInfo>> pathsToRender;	// List of paths to be shown
+	List<KeyValuePair<List<PathVertexInfo>,Color>> pathsToRender;	// List of paths to be shown
 
 	bool refreshPaths = true;	// Flag that indicates that a refresh of path drawing is necessary
 
@@ -30,7 +30,7 @@ public class MapView : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		this.pathsToRender = new List<List<PathVertexInfo>>();
+		this.pathsToRender = new List<KeyValuePair<List<PathVertexInfo>,Color>>();
 	}
 	
 	// Update is called once per frame
@@ -67,14 +67,14 @@ public class MapView : MonoBehaviour {
 		}
 	}
 
-	public void setPathsToRender( List<List<PathVertexInfo>> paths ){
+	public void setPathsToRender( List<KeyValuePair<List<PathVertexInfo>,Color>> paths ){
 		this.pathsToRender = paths;
 		this.refreshPaths = true;
 	}
 	private void renderPaths(){
 		this.clearPaths();
-		foreach( List<PathVertexInfo> path in this.pathsToRender ){
-			this.showPath( path, new Color(1,0,0) );
+		foreach( KeyValuePair<List<PathVertexInfo>,Color> path in this.pathsToRender ){
+			this.showPath( path.Key, path.Value );
 		}
 		this.refreshPaths = false;
 	}
@@ -90,7 +90,7 @@ public class MapView : MonoBehaviour {
 			}
 		}
 
-		Debug.Log( resPath );
+		//Debug.Log( resPath );
 	}
 	public void clearPaths(){
 		for( int y=0; y<this.mapModel.Height; y++ ){

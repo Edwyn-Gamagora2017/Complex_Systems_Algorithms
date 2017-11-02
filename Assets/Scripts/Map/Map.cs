@@ -196,9 +196,20 @@ public class Map {
 	/*
 	 * PATH FINDING
 	 */
-	public List<PathVertexInfo> findPath( Character enemy ){
+	public List<PathVertexInfo> findPathAstar( Character enemy ){
 		if( this.players.Count > 0 ){
 			PathVertexInfo targetPathInfo = this.graph.aStar(
+				this.graphIndexFromTile( this.getCharacterPositionX( enemy ), this.getCharacterPositionY( enemy ) ),
+				this.graphIndexFromTile( this.getCharacterPositionX( this.players[0] ), this.getCharacterPositionY( this.players[0] ) ) );
+			if( targetPathInfo != null ){
+				return targetPathInfo.pathTo();
+			}
+		}
+		return null;
+	}
+	public List<PathVertexInfo> findPathDijkstra( Character enemy ){
+		if( this.players.Count > 0 ){
+			PathVertexInfo targetPathInfo = this.graph.dijkstra(
 				this.graphIndexFromTile( this.getCharacterPositionX( enemy ), this.getCharacterPositionY( enemy ) ),
 				this.graphIndexFromTile( this.getCharacterPositionX( this.players[0] ), this.getCharacterPositionY( this.players[0] ) ) );
 			if( targetPathInfo != null ){

@@ -66,7 +66,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyMoveTimeInSec: 2
-  enemyMoveEnabled: 1
+  enemyMoveEnabled: 0
 --- !u!212 &212112381692986512
 SpriteRenderer:
   m_ObjectHideFlags: 1

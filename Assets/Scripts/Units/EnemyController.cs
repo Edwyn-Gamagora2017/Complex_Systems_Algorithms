@@ -9,6 +9,9 @@ public class EnemyController : Character_Controller {
 	int enemyMoveTimeInSec = 10;	// Interval in which enemy's movement is executed
 	[SerializeField]
 	bool enemyMoveEnabled = true;	// Indicates if the enemy's movement is enabled
+	[SerializeField]
+	bool moveAstar = true;			// Indicates if the enemy's movement is based on Astar algorithm
+
 	private float enemyMovementTimer = 0;	// Timer for enemy's movement
 
 	private MapController map;		// Controller to interact to the Map
@@ -30,7 +33,7 @@ public class EnemyController : Character_Controller {
 	protected override void Update (){
 		base.Update();
 
-		if( enemyMovementTimer <= 0 && enemyMoveEnabled ){
+		if( enemyMovementTimer <= 0 ){
 			enemyMovementTimer = enemyMoveTimeInSec;
 			executeMovement();
 		}
@@ -42,14 +45,20 @@ public class EnemyController : Character_Controller {
 	void executeMovement(){
 		// Find Path
 		Debug.Log("Find Path");
-		List<PathVertexInfo> path = this.model.findPath();
+		List<PathVertexInfo> pathAstar = this.model.findPathAstar();
+		List<PathVertexInfo> pathDijkstra = this.model.findPathDijkstra();
 		// Move enemy
-		if( path != null && path.Count > 1){
-			this.model.move( ((Map.TileInfo)path[ path.Count-2 ].Vertex).x, ((Map.TileInfo)path[ path.Count-2 ].Vertex).y );
+		List<PathVertexInfo> path = (this.moveAstar?pathAstar:pathDijkstra);
+		if( path != null && path.Count > 1 && enemyMoveEnabled ){
+			Map.TileInfo v = ((Map.TileInfo)path[ path.Count-2 ].Vertex);
+			this.model.move( v.x, v.y );
 		}
 		// Showing the path found
 		if( this.showPathFlag ){
-			this.map.includePath( path, this.model );
+			List<KeyValuePair<List<PathVertexInfo>,Color>> paths = new List<KeyValuePair<List<PathVertexInfo>,Color>>();
+			paths.Add( new KeyValuePair<List<PathVertexInfo>, Color>( pathAstar, new Color(1,0,0)) );
+			paths.Add( new KeyValuePair<List<PathVertexInfo>, Color>( pathDijkstra, new Color(0,0,1)) );
+			this.map.includePaths( paths, this.model );
 		}
 	}
 }
