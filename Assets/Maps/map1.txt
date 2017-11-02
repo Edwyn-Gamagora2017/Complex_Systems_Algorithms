@@ -23,7 +23,7 @@
 # player amount
 1
 # player x y
-4 1
+5 2
 
 # enemy amount
 1
