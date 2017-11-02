@@ -11,5 +11,23 @@ public class PlayerController : Character_Controller {
 	// Update is called once per frame
 	protected override void Update () {
 		base.Update();
+
+		// Handling mavements
+		if( Input.GetKeyDown(KeyCode.DownArrow) ){
+			// move player
+			this.model.moveDown();
+		}
+		if( Input.GetKeyDown(KeyCode.UpArrow) ){
+			// move player
+			this.model.moveUp();
+		}
+		if( Input.GetKeyDown(KeyCode.RightArrow) ){
+			// move player
+			this.model.moveRight();
+		}
+		if( Input.GetKeyDown(KeyCode.LeftArrow) ){
+			// move player
+			this.model.moveLeft();
+		}
 	}
 }

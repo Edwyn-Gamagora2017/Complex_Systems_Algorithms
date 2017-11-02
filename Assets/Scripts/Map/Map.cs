@@ -176,11 +176,14 @@ public class Map {
 		return (int)type;
 	}
 
-	public Vector2 getCharacterPosition( Character c ){
-		return new Vector2( Mathf.RoundToInt( c.getPosX() ), Mathf.RoundToInt( c.getPosY() ));
+	public int getCharacterPositionX( Character c ){
+		return Mathf.RoundToInt( c.getPosX() );
+	}
+	public int getCharacterPositionY( Character c ){
+		return Mathf.RoundToInt( c.getPosY() );
 	}
 	private bool checkCharacterPosition( Character c ){
-		return this.isUsefulPosition( (int)getCharacterPosition( c ).x, (int)getCharacterPosition( c ).y );
+		return this.isUsefulPosition( getCharacterPositionX(c), getCharacterPositionY(c) );
 	}
 	public void addPlayer( Character player ){
 		this.players.Add( player );
@@ -193,15 +196,26 @@ public class Map {
 	 * PATH FINDING
 	 */
 	public List<PathVertexInfo> findPath( Character enemy ){
-		Vector2 enemyPos = this.getCharacterPosition( enemy );
 		if( this.players.Count > 0 ){
-			Vector2 targetPos = this.getCharacterPosition( this.players[0] );
-			PathVertexInfo targetPathInfo = this.graph.aStar( this.graphIndexFromTile( (int)enemyPos.x, (int)enemyPos.y ), this.graphIndexFromTile( (int)targetPos.x, (int)targetPos.y ) );
+			PathVertexInfo targetPathInfo = this.graph.aStar(
+				this.graphIndexFromTile( this.getCharacterPositionX( enemy ), this.getCharacterPositionY( enemy ) ),
+				this.graphIndexFromTile( this.getCharacterPositionX( this.players[0] ), this.getCharacterPositionY( this.players[0] ) ) );
 			if( targetPathInfo != null ){
 				return targetPathInfo.pathTo();
 			}
 		}
 		return null;
+	}
+
+	/*
+	 * CHARACTERS
+	 */
+	public void characterMove( Character c, float newX, float newY ){
+		int x = Mathf.RoundToInt(newX);
+		int y = Mathf.RoundToInt(newY);
+		if( this.isUsefulPosition( x, y ) ){
+			c.setPos( new Vector2(x, y) );
+		}
 	}
 
 	public string toString()

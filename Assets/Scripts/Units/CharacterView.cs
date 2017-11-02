@@ -23,7 +23,6 @@ public class CharacterView : MonoBehaviour {
 	// Update is called once per frame
 	protected virtual void Update () {
 		// updating position
-		Vector2 pos = characterModel.positionInTheMap();
-		transform.position = new Vector3( pos.x, pos.y, -0.1f );
+		transform.position = new Vector3( this.characterModel.getPosX(), this.characterModel.getPosY(), -0.1f );
 	}
 }

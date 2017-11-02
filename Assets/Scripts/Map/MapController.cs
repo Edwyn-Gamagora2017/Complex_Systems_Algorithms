@@ -6,6 +6,9 @@ public class MapController : MonoBehaviour {
 
 	Map mapModel;			// stores the map information
 
+	Dictionary< Character, List<PathVertexInfo> > paths;	// Paths set by the characters
+	bool refreshPaths;					// Indicates if the list of paths must be refreshed on view
+
 	[SerializeField]
 	TextAsset mapFile;		// File that describes the map
 
@@ -21,6 +24,8 @@ public class MapController : MonoBehaviour {
 		else{
 			Debug.LogError( "MapView : mapFile not defined" );
 		}
+		this.paths = new Dictionary<Character,List<PathVertexInfo>>();
+		this.refreshPaths = true;
 	}
 
 	public List<Character> getPlayers(){
@@ -33,10 +38,24 @@ public class MapController : MonoBehaviour {
 	public void FindPath( Character enemy ){
 		this.mapModel.findPath( enemy );
 	}
-	public void showPath( List<PathVertexInfo> path, Color color ){
-		if( this.GetComponent<MapView>() != null ){
-			this.GetComponent<MapView>().showPath( path, color );
+	public void includePath( List<PathVertexInfo> path, Character c ){
+		if( !this.paths.ContainsKey(c) ){
+			this.paths.Add( c, path );
 		}
+		else{
+			this.paths[c] = path;
+		}
+		this.refreshPaths = true;
+	}
+	private void setViewPaths(){
+		if( this.GetComponent<MapView>() != null ){
+			List<List<PathVertexInfo>> pathsList = new List<List<PathVertexInfo>>();
+			foreach( List<PathVertexInfo> p in this.paths.Values ){
+				pathsList.Add( p );
+			}
+			this.GetComponent<MapView>().setPathsToRender( pathsList );
+		}
+		this.refreshPaths = false;
 	}
 
 	// Use this for initialization
@@ -46,6 +65,8 @@ public class MapController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
+		if( this.refreshPaths ){
+			this.setViewPaths();
+		}
 	}
 }

@@ -45,7 +45,7 @@ public class EnemyController : Character_Controller {
 		List<PathVertexInfo> path = this.model.findPath();
 		// Showing the path found
 		if( this.showPathFlag ){
-			this.map.showPath( path, new Color(1,0,0) );
+			this.map.includePath( path, this.model );
 		}
 	}
 }
