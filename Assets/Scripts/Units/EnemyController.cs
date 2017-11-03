@@ -44,6 +44,14 @@ public class EnemyController : Character_Controller {
 		}
 	}
 
+	// Mouse is over the object
+	void OnMouseOver(){
+		// Handling click
+		if( Input.GetMouseButtonDown( 0 ) ){	// Left click
+			this.changeMovementEnabled();
+		}
+	}
+
 	void executeMovement(){
 		// Find Path
 		Debug.Log("Find Path");
@@ -62,5 +70,9 @@ public class EnemyController : Character_Controller {
 			paths.Add( new KeyValuePair<List<PathVertexInfo>, Color>( pathDijkstra, new Color(0,0,1)) );
 			this.map.includePaths( paths, this.model );
 		}
+	}
+
+	public void changeMovementEnabled(){
+		this.enemyMoveEnabled = !this.enemyMoveEnabled;
 	}
 }
