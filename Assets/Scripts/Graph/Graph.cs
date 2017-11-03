@@ -29,13 +29,15 @@ public abstract class VertexInfo{
 // Class that determines necessary Vertex information to graph algorithms to path finding, such as A* algorithm
 public class PathVertexInfo{
 	private VertexInfo vertex;			// Vertex associated to the information
-	private PathVertexInfo previousVertex;	// the previous Vertex in the path
+	private PathVertexInfo previousVertex;		// the previous Vertex in the path
+	private float costFromPrevious;				// the cost of the edge from the previous Vertex in the path
 	private float distanceToVertex;		// Distance acumulated until arriving to the vertex
 	private bool visited;				// Idicates if the vertex was processed by the algorithms
 
 	public PathVertexInfo( VertexInfo vertex, float distanceToVertex = 0 ){
 		this.vertex = vertex;
 		this.previousVertex = null;
+		this.costFromPrevious = 0;
 		this.distanceToVertex = distanceToVertex;
 		this.visited = false;
 	}
@@ -64,6 +66,14 @@ public class PathVertexInfo{
 	public int PreviousVertexIndex {
 		get {
 			return previousVertex.VertexIndex;
+		}
+	}
+	public float CostFromPrevious {
+		get {
+			return costFromPrevious;
+		}
+		set {
+			costFromPrevious = value;
 		}
 	}
 	public VertexInfo Vertex {
@@ -236,6 +246,7 @@ public class Graph {
 						PathVertexInfo neighborVertex = info[ neighbor.index ];
 						neighborVertex.DistanceToVertex = currentVertex.DistanceToVertex + neighbor.edgeWeight + neighborVertex.VertexCost;
 						neighborVertex.PreviousVertex = currentVertex;
+						neighborVertex.CostFromPrevious = neighbor.edgeWeight;
 						// Add neighbor
 						open.Add( neighborVertex );
 					}
@@ -303,6 +314,7 @@ public class Graph {
 						if( neighborVertex.DistanceToVertex > newDistance ){
 							neighborVertex.DistanceToVertex = newDistance;
 							neighborVertex.PreviousVertex = currentVertex;
+							neighborVertex.CostFromPrevious = neighbor.edgeWeight;
 						}
 						// Add neighbor
 						if( !vertexAlreadyInList( neighbor.index, open ) ){

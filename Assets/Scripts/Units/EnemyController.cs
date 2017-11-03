@@ -27,6 +27,7 @@ public class EnemyController : Character_Controller {
 	// Use this for initialization
 	protected override void Start () {
 		base.Start();
+		this.enemyMovementTimer = ( this.enemyMoveEnabled ? enemyMoveTimeInSec*(this.map.getCharacterPositionCost( this.model )+1) : 0 );
 	}
 	
 	// Update is called once per frame
@@ -35,12 +36,11 @@ public class EnemyController : Character_Controller {
 
 		if( enemyMovementTimer <= 0 ){
 			executeMovement();
-			this.enemyMovementTimer = enemyMoveTimeInSec*(this.map.getCharacterPositionCost( this.model )+1);
+			// TODO Consider edge cost
+			this.enemyMovementTimer = enemyMoveTimeInSec* ( this.enemyMoveEnabled ? (this.map.getCharacterPositionCost( this.model )+1) : 1 );
 		}
 		else{
-			if( this.enemyMoveEnabled ){
-				enemyMovementTimer -= Time.deltaTime;
-			}
+			enemyMovementTimer -= Time.deltaTime;
 		}
 	}
 
@@ -53,7 +53,6 @@ public class EnemyController : Character_Controller {
 		List<PathVertexInfo> path = (this.moveAstar?pathAstar:pathDijkstra);
 		if( path != null && path.Count > 1 && enemyMoveEnabled ){
 			Map.TileInfo v = ((Map.TileInfo)path[ path.Count-2 ].Vertex);
-			// Consider edge cost
 			this.model.move( v.x, v.y );
 		}
 		// Showing the path found
