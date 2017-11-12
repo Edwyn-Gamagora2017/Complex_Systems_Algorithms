@@ -62,6 +62,9 @@ public class EnemyController : Character_Controller {
 		if( path != null && path.Count > 1 && enemyMoveEnabled ){
 			Map.TileInfo v = ((Map.TileInfo)path[ path.Count-2 ].Vertex);
 			this.model.move( v.x, v.y );
+			// Removing the last vertex of the path because it was used by the character
+			pathAstar.RemoveAt( pathAstar.Count-1 );
+			pathDijkstra.RemoveAt( pathDijkstra.Count-1 );
 		}
 		// Showing the path found
 		if( this.showPathFlag ){

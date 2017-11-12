@@ -17,10 +17,9 @@ public class Map {
 		public int x;				// position of the tile in the map : X component
 		public int y;				// position of the tile in the map : Y component
 
-		public TileInfo( int x, int y, MapTileType type, float tileCost, int index ) : base(index){
+		public TileInfo( int x, int y, MapTileType type, float tileCost, int index ) : base(index, tileCost){
 			this.x = x;
 			this.y = y;
-			this.vertexCost = tileCost;
 			this.type = type;
 		}
 
