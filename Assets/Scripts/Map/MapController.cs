@@ -31,7 +31,7 @@ public class MapController : MonoBehaviour {
 	public List<Character> getPlayers(){
 		return this.mapModel.Players;
 	}
-	public List<Character> getEnemies(){
+	public List<Enemy> getEnemies(){
 		return this.mapModel.Enemies;
 	}
 	public float getCharacterPositionCost( Character c ){

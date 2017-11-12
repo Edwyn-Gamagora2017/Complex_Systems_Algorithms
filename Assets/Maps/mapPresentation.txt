@@ -27,5 +27,5 @@
 
 # enemy amount
 1
-# enemy x y
-4 4
+# enemy x y pathFinding(0:aStar;1:dijkstra)
+4 4 0

@@ -9,8 +9,6 @@ public class EnemyController : Character_Controller {
 	int enemyMoveTimeInSec = 1;	// Interval in which enemy's movement is executed
 	[SerializeField]
 	bool enemyMoveEnabled = true;	// Indicates if the enemy's movement is enabled
-	[SerializeField]
-	bool moveAstar = true;			// Indicates if the enemy's movement is based on Astar algorithm
 
 	private float enemyMovementTimer = 0;	// Timer for enemy's movement
 
@@ -50,15 +48,17 @@ public class EnemyController : Character_Controller {
 		if( Input.GetMouseButtonDown( 0 ) ){	// Left click
 			this.changeMovementEnabled();
 		}
+		if( Input.GetMouseButtonDown( 1 )){	// Left click
+			this.changeFindingPath();
+		}
 	}
 
 	void executeMovement(){
 		// Find Path
-		Debug.Log("Find Path");
 		List<PathVertexInfo> pathAstar = this.model.findPathAstar();
 		List<PathVertexInfo> pathDijkstra = this.model.findPathDijkstra();
 		// Move enemy
-		List<PathVertexInfo> path = (this.moveAstar?pathAstar:pathDijkstra);
+		List<PathVertexInfo> path = (((Enemy)this.model).AStar?pathAstar:pathDijkstra);
 		if( path != null && path.Count > 1 && enemyMoveEnabled ){
 			Map.TileInfo v = ((Map.TileInfo)path[ path.Count-2 ].Vertex);
 			this.model.move( v.x, v.y );
@@ -66,13 +66,16 @@ public class EnemyController : Character_Controller {
 		// Showing the path found
 		if( this.showPathFlag ){
 			List<KeyValuePair<List<PathVertexInfo>,Color>> paths = new List<KeyValuePair<List<PathVertexInfo>,Color>>();
-			paths.Add( new KeyValuePair<List<PathVertexInfo>, Color>( pathAstar, new Color(1,0,0)) );
-			paths.Add( new KeyValuePair<List<PathVertexInfo>, Color>( pathDijkstra, new Color(0,0,1)) );
+			paths.Add( new KeyValuePair<List<PathVertexInfo>, Color>( pathAstar, this.GetComponent< EnemyView >().AStar ) );
+			paths.Add( new KeyValuePair<List<PathVertexInfo>, Color>( pathDijkstra, this.GetComponent< EnemyView >().Dijkstra ) );
 			this.map.includePaths( paths, this.model );
 		}
 	}
 
 	public void changeMovementEnabled(){
 		this.enemyMoveEnabled = !this.enemyMoveEnabled;
+	}
+	public void changeFindingPath(){
+		((Enemy)this.model).AStar = !((Enemy)this.model).AStar;
 	}
 }

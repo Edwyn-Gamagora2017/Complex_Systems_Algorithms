@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class Character {
 
-	Vector2 position;
-	Map map;
+	protected Vector2 position;
+	protected Map map;
 
 	public Character( Vector2 pos, Map map ){
 		this.position = pos;

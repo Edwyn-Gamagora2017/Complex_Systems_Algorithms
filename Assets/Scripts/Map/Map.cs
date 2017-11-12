@@ -54,14 +54,14 @@ public class Map {
 	private	Graph graph;				// the representation of the map as a graph
 
 	List<Character> players;			// Players
-	List<Character> enemies;			// Enemies
+	List<Enemy> enemies;				// Enemies
 
 	public Map( int height, int width, bool neighborhood4, bool bidirectional ){
 		this.height = height;
 		this.width = width;
 		this.neighborhood4 = neighborhood4;
 		this.players = new List<Character>();
-		this.enemies = new List<Character>();
+		this.enemies = new List<Enemy>();
 
 		// Creating empty matrix
 		this.mapTiles = new TileInfo[height][];
@@ -82,7 +82,7 @@ public class Map {
 			return players;
 		}
 	}
-	public List<Character> Enemies {
+	public List<Enemy> Enemies {
 		get {
 			return enemies;
 		}
@@ -192,7 +192,7 @@ public class Map {
 	public void addPlayer( Character player ){
 		this.players.Add( player );
 	}
-	public void addEnemy( Character enemy ){
+	public void addEnemy( Enemy enemy ){
 		this.enemies.Add( enemy );
 	}
 
@@ -307,7 +307,8 @@ public class Map {
 			int nEnemies = int.Parse( lines[lineIt][0] );
 			lineIt++;
 			for( int i=0; i<nEnemies; i++ ){
-				Character c = new Character( new Vector2( int.Parse( lines[lineIt][0] ), int.Parse(lines[lineIt][1]) ), m );
+				// Color color = new Color(int.Parse(lines[lineIt][3])/255f,int.Parse(lines[lineIt][4])/255f,int.Parse(lines[lineIt][5])/255f);
+				Enemy c = new Enemy( new Vector2( int.Parse( lines[lineIt][0] ), int.Parse(lines[lineIt][1]) ), m, int.Parse(lines[lineIt][2]) == 0 );
 				if( m.checkCharacterPosition( c ) ){
 					m.addEnemy(c);
 				}

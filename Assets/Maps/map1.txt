@@ -28,8 +28,8 @@
 
 # enemy amount
 2
-# enemy x y
-5 7
-1 1
+# enemy x y pathFinding(0:aStar;1:dijkstra)
+5 7 0
+1 1 0
 
 # difference between dijkstra and Astar when player is at 3 6
