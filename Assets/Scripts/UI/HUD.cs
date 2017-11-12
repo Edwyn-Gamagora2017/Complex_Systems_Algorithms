@@ -20,7 +20,8 @@ public class HUD : MonoBehaviour {
 	[SerializeField]
 	UnityEngine.UI.Dropdown mapsDropdown; // Used to list maps
 
-	static string mapsFolderPath = "Assets/Maps/"; // Path to the folder that contains the map files
+	//static string mapsFolderPath = "Maps/"; // Path to the folder that contains the map files
+	static string mapsFolderPath = "Assets/Resources/Maps/"; // Path to the folder that contains the map files
 
 	// Use this for initialization
 	void Start () {
@@ -46,14 +47,18 @@ public class HUD : MonoBehaviour {
 	List<string> getMapsPaths(){
 		List<string> result = new List<string>();
 
-		System.IO.DirectoryInfo info = new System.IO.DirectoryInfo( HUD.mapsFolderPath );
-		if( info.Exists ){
-			foreach( System.IO.FileInfo f in info.GetFiles() ){
-				if( !f.Name.EndsWith(".meta") ){
-					result.Add( f.Name );
-				}
-			}
-		}
+		/*Object[] files = Resources.LoadAll( HUD.mapsFolderPath );
+		foreach( Object o in files ){
+			result.Add( o.name );
+		}*/
+		System.IO.DirectoryInfo info = new System.IO.DirectoryInfo( HUD.mapsFolderPath ); 
+		if( info.Exists ){ 
+			foreach( System.IO.FileInfo f in info.GetFiles() ){ 
+				if( !f.Name.EndsWith(".meta") ){ 
+					result.Add( f.Name ); 
+				} 
+			} 
+		} 
 
 		return result;
 	}

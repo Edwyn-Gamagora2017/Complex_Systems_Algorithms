@@ -349,18 +349,20 @@ public class Map {
 	{
 		string path = fileName;
 
-		// Starting Reader
-		System.IO.StreamReader reader;
-		try{
-			reader = new System.IO.StreamReader( path );
-		}
-		catch( System.Exception ex ){
-			Debug.LogError ( "Error while opening the Map file" );
-			Debug.LogError( ex.Message );
-			return null;
-		}
+		// Starting Reader 
+		System.IO.StreamReader reader; 
+		try{ 
+			reader = new System.IO.StreamReader( path ); 
+		} 
+		catch( System.Exception ex ){ 
+			Debug.LogError ( "Error while opening the Map file" ); 
+			Debug.LogError( ex.Message ); 
+			return null; 
+		} 
 
-		// Reading Information
-		return Map.read( reader.ReadToEnd() );
+		// Reading Information 
+		return Map.read( reader.ReadToEnd() ); 
+
+		//return Map.read( Resources.Load<TextAsset>( fileName ).text );
 	}
 }
