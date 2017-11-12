@@ -8,6 +8,13 @@
 # Map format: H W 4neighborhood bidirectional
 5 4 1 1
 
+# Cost for type of terrain
+# type cost (wall is not considered)
+1 1
+2 2
+3 0
+4 3
+
 # Map format: types ( 0,0 -> bottom left )
 0 0 0 0
 0 1 1 0

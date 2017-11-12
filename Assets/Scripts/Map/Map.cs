@@ -9,18 +9,6 @@ public class Map {
 	public enum MapTileType{
 		Wall, Grass, Water, Rock, Mud, NotDefined
 	};
-	// Indicates the Weight of each TileType
-	public static float mapTileTypeWeight( MapTileType type ){
-		switch( type ){
-		case MapTileType.Wall: 			return 0;
-		case MapTileType.Grass: 		return 1;
-		case MapTileType.Water: 		return 2;
-		case MapTileType.Rock: 			return 0;
-		case MapTileType.Mud: 			return 3;
-		case MapTileType.NotDefined:	return 0;
-		default:						return 0;
-		}
-	}
 
 	// Class to be used to store a vertex in the graph
 	public class TileInfo : VertexInfo{
@@ -29,10 +17,10 @@ public class Map {
 		public int x;				// position of the tile in the map : X component
 		public int y;				// position of the tile in the map : Y component
 
-		public TileInfo( int x, int y, MapTileType type, int index ) : base(index){
+		public TileInfo( int x, int y, MapTileType type, float tileCost, int index ) : base(index){
 			this.x = x;
 			this.y = y;
-			this.vertexCost = Map.mapTileTypeWeight( type );
+			this.vertexCost = tileCost;
 			this.type = type;
 		}
 
@@ -51,6 +39,7 @@ public class Map {
 	int width;							// Map width
 	private bool neighborhood4;			// the map doesnt consider the diagonal for the neighborhood
 	private TileInfo[][] mapTiles;		// the grid of tile
+	private Dictionary<MapTileType, float> mapTileTypeCost;	// Indicates the Cost of each TileType
 	private	Graph graph;				// the representation of the map as a graph
 
 	List<Character> players;			// Players
@@ -60,6 +49,7 @@ public class Map {
 		this.height = height;
 		this.width = width;
 		this.neighborhood4 = neighborhood4;
+		this.mapTileTypeCost = new Dictionary<MapTileType, float>();
 		this.players = new List<Character>();
 		this.enemies = new List<Enemy>();
 
@@ -68,7 +58,7 @@ public class Map {
 		for(int y = 0; y < height; y++){
 			this.mapTiles[y] = new TileInfo[width];
 			for(int x=0; x<width; x++){
-				this.mapTiles[y][x] = new TileInfo(x,y,MapTileType.NotDefined,this.graphIndexFromTile(x,y));
+				this.mapTiles[y][x] = new TileInfo(x,y,MapTileType.NotDefined,this.getMapTileTypeCost(MapTileType.NotDefined),this.graphIndexFromTile(x,y));
 			}
 		}
 
@@ -106,12 +96,33 @@ public class Map {
 			return MapTileType.NotDefined;
 		}
 	}
+	// returns the cost for a given type
+	public float getMapTileTypeCost( MapTileType type ){
+		if( this.mapTileTypeCost.ContainsKey( type ) ){
+			return this.mapTileTypeCost[ type ];
+		}
+		else{
+			return float.MaxValue;
+		}
+	}
+	/*
+	 * SETTERS
+	 */
+	// set the cost for a given type
+	public void setMapTileTypeCost( MapTileType type, float cost ){
+		if( this.mapTileTypeCost.ContainsKey( type ) && type != MapTileType.Wall && type != MapTileType.NotDefined ){
+			this.mapTileTypeCost[ type ] = cost;
+		}
+		else{
+			this.mapTileTypeCost.Add(type,cost);
+		}
+	}
 
 	// insert the tile in the map matrix and into the graph
 	public void addTile( int x, int y, MapTileType type ){
 		// Check map bounds
 		if( this.isValidTilePosition(x,y) ){
-			TileInfo info = new TileInfo( x, y, type, this.graphIndexFromTile(x,y));
+			TileInfo info = new TileInfo( x, y, type, this.getMapTileTypeCost( type ), this.graphIndexFromTile(x,y));
 			this.mapTiles[y][x] = info;
 			this.graph.setVertex( info.VertexIndex, info );
 
@@ -270,6 +281,7 @@ public class Map {
 			}
 
 			int lineIt = 0;
+
 			// initial info
 			string[] infoline = lines[lineIt];
 			lineIt++;
@@ -279,6 +291,15 @@ public class Map {
 			bool bidirectional = int.Parse(infoline [3]) == 1;
 
 			Map m = new Map(height, width, neighborhood4, bidirectional);
+
+			// Vertices Costs
+			for (int i = 0; i < 4; i++) {
+				// line for the cost
+				string[] costLine = lines[lineIt];
+				lineIt++;
+
+				m.setMapTileTypeCost( Map.typeIndexToType( int.Parse(costLine[0]) ), float.Parse( costLine[1] ) );
+			}
 			
 			// Vertices
 			for (int y = 0; y < height; y++) {
