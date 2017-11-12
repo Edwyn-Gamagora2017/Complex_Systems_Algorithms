@@ -349,6 +349,9 @@ public class Map {
 	{
 		string path = fileName;
 
+		// UNCOMMENT FOR FIXED MAP FILES : WEB BUILD
+		//return Map.read( Resources.Load<TextAsset>( fileName ).text );
+
 		// Starting Reader 
 		System.IO.StreamReader reader; 
 		try{ 
@@ -362,7 +365,5 @@ public class Map {
 
 		// Reading Information 
 		return Map.read( reader.ReadToEnd() ); 
-
-		//return Map.read( Resources.Load<TextAsset>( fileName ).text );
 	}
 }
