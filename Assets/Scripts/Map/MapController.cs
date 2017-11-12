@@ -9,41 +9,50 @@ public class MapController : MonoBehaviour {
 	Dictionary< Character, List<KeyValuePair<List<PathVertexInfo>,Color>> > paths;	// Paths set by the characters
 	bool refreshPaths;					// Indicates if the list of paths must be refreshed on view
 
-	[SerializeField]
-	TextAsset mapFile;		// File that describes the map
-
 	// To be executed before the component starts
 	void Awake () {
-		// Create the map based on the file
-		if( this.mapFile != null ){
-			this.mapModel = Map.read( this.mapFile.text );
-			if( this.GetComponent<MapView>() != null ){
-				this.GetComponent<MapView>().MapModel = this.mapModel;
-			}
-		}
-		else{
-			Debug.LogError( "MapView : mapFile not defined" );
-		}
 		this.paths = new Dictionary<Character,List<KeyValuePair<List<PathVertexInfo>,Color>>>();
 		this.refreshPaths = true;
 	}
 
-	public List<Character> getPlayers(){
-		return this.mapModel.Players;
-	}
-	public List<Enemy> getEnemies(){
-		return this.mapModel.Enemies;
-	}
-	public float getCharacterPositionCost( Character c ){
-		return this.mapModel.getCharacterPositionCost( c );
+	public bool setMap( string path ){
+		// Create the map based on the file
+		this.mapModel = Map.readFromFile( path );
+		if( this.GetComponent<MapView>() != null ){
+			this.GetComponent<MapView>().MapModel = this.mapModel;
+		}
+
+		return this.mapModel != null;
 	}
 
-	public void FindPathAstar( Character enemy ){
-		this.mapModel.findPathAstar( enemy );
+	/*
+	 * GETTERS
+	 */
+	public List<Character> getPlayers(){
+		if( this.mapModel != null ){
+			return this.mapModel.Players;
+		}else{
+			return new List<Character>();
+		}
 	}
-	public void FindPathDijkstra( Character enemy ){
-		this.mapModel.findPathDijkstra( enemy );
+	public List<Enemy> getEnemies(){
+		if( this.mapModel != null ){
+			return this.mapModel.Enemies;
+		}else{
+			return new List<Enemy>();
+		}
 	}
+	public float getCharacterPositionCost( Character c ){
+		if( this.mapModel != null ){
+			return this.mapModel.getCharacterPositionCost( c );
+		}else{
+			return float.MaxValue;
+		}
+	}
+
+	/*
+	 * PATH FINDING
+	 */
 	public void includePaths( List<KeyValuePair<List<PathVertexInfo>,Color>> paths, Character c ){
 		if( !this.paths.ContainsKey(c) ){
 			this.paths.Add( c, paths );

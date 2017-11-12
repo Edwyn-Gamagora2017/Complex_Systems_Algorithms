@@ -268,7 +268,7 @@ public class Map {
 		*/
 
 		// Reading Information
-		//try{
+		try{
 			string[] linesWithComments = content.Split('\n');
 			List<string[]> lines = new List<string[]>();
 			// filtering comments and empty lines
@@ -339,11 +339,11 @@ public class Map {
 			}
 
 			return m;
-		/*}catch( System.Exception ex ){
+		}catch( System.Exception ex ){
 			Debug.LogError ( "Error while opening the Map file : wrong format" );
 			Debug.LogError( ex.Message );
 			return null;
-		}*/
+		}
 	}
 	public static Map readFromFile( string fileName )
 	{

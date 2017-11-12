@@ -16,8 +16,6 @@ public class MapView : MonoBehaviour {
 	[SerializeField]
 	GameObject mapContainer;	// Element that involve the map
 	[SerializeField]
-	Camera mapCamera;			// Camera that is responsable for showing the map
-	[SerializeField]
 	GameObject mapTilePrefab;	// Element that represents a mapTile				
 
 	/* PROPERTIES */
@@ -54,19 +52,25 @@ public class MapView : MonoBehaviour {
 	private void drawMap(){
 		this.tileGameObjects = new Dictionary<KeyValuePair<int, int>, GameObject>();
 
-		for( int y=0; y<this.mapModel.Height; y++ ){
-			for( int x=0; x<this.mapModel.Width; x++ ){
-				Map.MapTileType type = this.mapModel.getTileType( x,y );
-				this.tileGameObjects.Add( new KeyValuePair<int, int>( y,x ), this.createMapTile( type, x, y ) );
+		if( this.mapModel != null ){
+			for( int y=0; y<this.mapModel.Height; y++ ){
+				for( int x=0; x<this.mapModel.Width; x++ ){
+					Map.MapTileType type = this.mapModel.getTileType( x,y );
+					this.tileGameObjects.Add( new KeyValuePair<int, int>( y,x ), this.createMapTile( type, x, y ) );
+				}
 			}
-		}
-		// Adjust the camera
-		if( mapCamera != null ){
-			mapCamera.transform.position = new Vector3( this.mapModel.Width/2f-0.5f, this.mapModel.Height/2f-0.5f, -1 );	// 0.5 is the size of a half of the tile
-			mapCamera.orthographicSize = Mathf.Max( this.mapModel.Width/2f, this.mapModel.Height/2f );
+			// Adjust the camera
+			Camera mapCamera = GameObject.FindObjectOfType<Camera>();
+			if( mapCamera != null ){
+				mapCamera.transform.position = new Vector3( this.mapModel.Width/2f-0.5f, this.mapModel.Height/2f-0.5f, -1 );	// 0.5 is the size of a half of the tile
+				mapCamera.orthographicSize = Mathf.Max( this.mapModel.Width/2f, this.mapModel.Height/2f );
+			}
 		}
 	}
 
+	/*
+	 * DRAW PATHS
+	 */
 	public void setPathsToRender( List<KeyValuePair<List<PathVertexInfo>,Color>> paths ){
 		this.pathsToRender = paths;
 		this.refreshPaths = true;
@@ -93,11 +97,13 @@ public class MapView : MonoBehaviour {
 		//Debug.Log( resPath );
 	}
 	public void clearPaths(){
-		for( int y=0; y<this.mapModel.Height; y++ ){
-			for( int x=0; x<this.mapModel.Width; x++ ){
-				GameObject tile = this.tileGameObjects[ new KeyValuePair<int,int>( y, x ) ];
-				if( tile != null ){
-					tile.GetComponent<MapTileView>().hidePath();
+		if( this.mapModel != null ){
+			for( int y=0; y<this.mapModel.Height; y++ ){
+				for( int x=0; x<this.mapModel.Width; x++ ){
+					GameObject tile = this.tileGameObjects[ new KeyValuePair<int,int>( y, x ) ];
+					if( tile != null ){
+						tile.GetComponent<MapTileView>().hidePath();
+					}
 				}
 			}
 		}
