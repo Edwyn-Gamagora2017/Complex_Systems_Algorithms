@@ -6,8 +6,6 @@ public class EnemyController : Character_Controller {
 
 	// Game Settings
 	[SerializeField]
-	int enemyMoveTimeInSec = 1;	// Interval in which enemy's movement is executed
-	[SerializeField]
 	bool enemyMoveEnabled = true;	// Indicates if the enemy's movement is enabled
 
 	private float enemyMovementTimer = 0;	// Timer for enemy's movement
@@ -25,7 +23,7 @@ public class EnemyController : Character_Controller {
 	// Use this for initialization
 	protected override void Start () {
 		base.Start();
-		this.enemyMovementTimer = ( this.enemyMoveEnabled ? enemyMoveTimeInSec*(this.map.getCharacterPositionCost( this.model )+1) : 0 );
+		this.enemyMovementTimer = ( this.enemyMoveEnabled ? Character_Controller.moveTimeInSec * (this.map.getCharacterPositionCost( this.model )+1) : 0 );
 	}
 	
 	// Update is called once per frame
@@ -35,7 +33,7 @@ public class EnemyController : Character_Controller {
 		if( enemyMovementTimer <= 0 ){
 			executeMovement();
 			// TODO Consider edge cost
-			this.enemyMovementTimer = enemyMoveTimeInSec* ( this.enemyMoveEnabled ? (this.map.getCharacterPositionCost( this.model )+1) : 1 );
+			this.enemyMovementTimer = Character_Controller.moveTimeInSec * ( this.enemyMoveEnabled ? (this.map.getCharacterPositionCost( this.model )+1) : 1 );
 		}
 		else{
 			enemyMovementTimer -= Time.deltaTime;
@@ -48,7 +46,7 @@ public class EnemyController : Character_Controller {
 		if( Input.GetMouseButtonDown( 0 ) ){	// Left click
 			this.changeMovementEnabled();
 		}
-		if( Input.GetMouseButtonDown( 1 )){	// Left click
+		if( Input.GetMouseButtonDown( 1 )){	// Right click
 			this.changeFindingPath();
 		}
 	}

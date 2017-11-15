@@ -41,7 +41,7 @@ public class Map {
 	private Dictionary<MapTileType, float> mapTileTypeCost;	// Indicates the Cost of each TileType
 	private	Graph graph;				// the representation of the map as a graph
 
-	List<Character> players;			// Players
+	List<Player> players;			// Players
 	List<Enemy> enemies;				// Enemies
 
 	public Map( int height, int width, bool neighborhood4, bool bidirectional ){
@@ -49,7 +49,7 @@ public class Map {
 		this.width = width;
 		this.neighborhood4 = neighborhood4;
 		this.mapTileTypeCost = new Dictionary<MapTileType, float>();
-		this.players = new List<Character>();
+		this.players = new List<Player>();
 		this.enemies = new List<Enemy>();
 
 		// Creating empty matrix
@@ -66,7 +66,7 @@ public class Map {
 	}
 
 	/* PROPERTIES */
-	public List<Character> Players {
+	public List<Player> Players {
 		get {
 			return players;
 		}
@@ -199,7 +199,7 @@ public class Map {
 	public float getCharacterPositionCost( Character c ){
 		return this.mapTiles[ getCharacterPositionY(c) ][ getCharacterPositionX(c) ].VertexCost;
 	}
-	public void addPlayer( Character player ){
+	public void addPlayer( Player player ){
 		this.players.Add( player );
 	}
 	public void addEnemy( Enemy enemy ){
@@ -315,7 +315,7 @@ public class Map {
 			//int nPlayers = int.Parse( lines[lineIt][0] );
 			//lineIt++;
 			for( int i=0; i<nPlayers; i++ ){
-				Character c = new Character( new Vector2( int.Parse( lines[lineIt][0] ), int.Parse(lines[lineIt][1]) ), m );
+				Player c = new Player( new Vector2( int.Parse( lines[lineIt][0] ), int.Parse(lines[lineIt][1]) ), m );
 				if( m.checkCharacterPosition( c ) ){
 					m.addPlayer(c);
 				}

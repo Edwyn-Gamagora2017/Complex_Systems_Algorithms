@@ -28,11 +28,11 @@ public class MapController : MonoBehaviour {
 	/*
 	 * GETTERS
 	 */
-	public List<Character> getPlayers(){
+	public List<Player> getPlayers(){
 		if( this.mapModel != null ){
 			return this.mapModel.Players;
 		}else{
-			return new List<Character>();
+			return new List<Player>();
 		}
 	}
 	public List<Enemy> getEnemies(){

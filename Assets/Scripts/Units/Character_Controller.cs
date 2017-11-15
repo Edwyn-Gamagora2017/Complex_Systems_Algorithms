@@ -6,6 +6,8 @@ public class Character_Controller : MonoBehaviour {
 
 	protected Character model; // Stores the Character Model values
 
+	public const int moveTimeInSec = 1;	// Interval in which characther's movement is executed
+
 	public Character Model {
 		set {
 			model = value;
