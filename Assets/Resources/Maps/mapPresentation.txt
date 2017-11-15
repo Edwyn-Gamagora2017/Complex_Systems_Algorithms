@@ -5,8 +5,8 @@
 # 3 Rock
 # 4 Mud
 
-# Map format: H W 4neighborhood bidirectional
-10 10 0 1
+# Map format: H W 4neighborhood
+10 10 0
 
 # Cost for type of terrain
 # type cost (wall is not considered)

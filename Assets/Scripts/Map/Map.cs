@@ -272,7 +272,7 @@ public class Map {
 	{
 		/*
 		 * File format :
-		 * Height Width 0|1(neighborhood4) 0|1(bidirectional)
+		 * Height Width 0|1(neighborhood4)
 		 * Height *
 		 * 	[Width * MapTileType (index)]
 		*/
@@ -297,9 +297,9 @@ public class Map {
 			int height = int.Parse(infoline [0]);
 			int width = int.Parse(infoline [1]);
 			bool neighborhood4 = int.Parse(infoline [2]) == 1;
-			bool bidirectional = int.Parse(infoline [3]) == 1;
+			//bool bidirectional = int.Parse(infoline [3]) == 1;
 
-			Map m = new Map(height, width, neighborhood4, bidirectional);
+			Map m = new Map(height, width, neighborhood4, true);
 
 			// Vertices Costs
 			for (int i = 0; i < 4; i++) {
