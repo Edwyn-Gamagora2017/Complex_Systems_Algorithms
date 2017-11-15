@@ -15,11 +15,11 @@
 3 0
 4 3
 
-# Map format: types ( 0,0 -> bottom left )
+# Map format: types ( 0,0 -> bottom left ); it will ignore values that are not types (such as 5, in this example)
 0 0 0 0 0 0 0 0
 0 1 0 1 1 1 1 0
-0 1 0 1 1 1 0 0
-0 1 1 2 2 1 0 0
+0 1 0 1 1 1 0 5
+0 1 1 2 2 1 0 5
 0 1 4 2 2 2 2 0
 0 3 4 0 0 0 0 0
 0 3 3 3 4 3 3 0
@@ -29,7 +29,7 @@
 
 # player x y
 # 5 2
-3 6
+6 5
 
 # enemy amount
 2
@@ -37,4 +37,4 @@
 5 7 0
 1 1 0
 
-# difference between dijkstra and Astar when player is at 3 6
+# difference between dijkstra and Astar when player is at 6 5

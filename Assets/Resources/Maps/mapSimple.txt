@@ -15,7 +15,7 @@
 3 0
 4 3
 
-# Map format: types ( 0,0 -> bottom left )
+# Map format: types ( 0,0 -> bottom left ); it will ignore values that are not types
 0 0 0
 0 1 0
 0 1 0
