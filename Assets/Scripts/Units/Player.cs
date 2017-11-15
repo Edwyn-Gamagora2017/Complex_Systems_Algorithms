@@ -13,7 +13,7 @@ public class Player : Character {
 	 * CONSTRUCTOR
 	 */
 	public Player( Vector2 position, Map map ) : base( position, map ){
-		this.freeMove = false;
+		this.freeMove = true;
 	}
 
 	/*
