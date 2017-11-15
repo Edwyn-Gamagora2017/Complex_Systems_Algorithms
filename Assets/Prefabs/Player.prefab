@@ -91,7 +91,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spriteCharacter: {fileID: 21300000, guid: d6c373fdd40aa724dbfe02d487d90d21, type: 3}
-  freeMoveColor: {r: 0.97794116, g: 0.6676978, b: 0, a: 1}
+  freeMoveColor: {r: 0, g: 0.375, b: 0.025862038, a: 1}
 --- !u!212 &212243720730912586
 SpriteRenderer:
   m_ObjectHideFlags: 1

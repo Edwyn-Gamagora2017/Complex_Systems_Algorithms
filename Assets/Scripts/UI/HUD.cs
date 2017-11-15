@@ -8,7 +8,9 @@ public class HUD : MonoBehaviour {
 	Game_Manager manager;		// Game Controller that will generate and manipulate the map and players
 
 	[SerializeField]
-	EnemyView enemyViewPrefab;	// Prefab that defines the colors that represents the algorithms
+	EnemyView enemyViewPrefab;		// Prefab that defines the colors that represents the algorithms
+	[SerializeField]
+	PlayerView playerViewPrefab;	// Prefab that defines the colors that represents the player
 
 	[SerializeField]
 	GameObject MapLoadFailPanel;	// Panel to be shown if the map cant be loaded
@@ -18,6 +20,8 @@ public class HUD : MonoBehaviour {
 	[SerializeField]
 	UnityEngine.UI.Image dijkstraIcon;
 	[SerializeField]
+	UnityEngine.UI.Image freeMovementIcon;
+	[SerializeField]
 	UnityEngine.UI.Dropdown mapsDropdown; // Used to list maps
 
 	//static string mapsFolderPath = "Maps/"; // Path to the folder that contains the map files // UNCOMMENT FOR FIXED MAP FILES : WEB BUILD
@@ -25,6 +29,10 @@ public class HUD : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		aStarIcon.color = enemyViewPrefab.AStar;
+		dijkstraIcon.color = enemyViewPrefab.Dijkstra;
+		freeMovementIcon.color = playerViewPrefab.FreeMoveColor;
+
 		listMaps();
 
 		setMapPath();
@@ -32,8 +40,6 @@ public class HUD : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		aStarIcon.color = enemyViewPrefab.AStar;
-		dijkstraIcon.color = enemyViewPrefab.Dijkstra;
 	}
 
 	public void listMaps(){

@@ -10,6 +10,15 @@ public class PlayerView : CharacterView {
 	[SerializeField]
 	Color freeMoveColor;		// Color that represents that the player is free to move
 
+	/*
+	 * GETTERS
+	 */
+	public Color FreeMoveColor {
+		get {
+			return freeMoveColor;
+		}
+	}
+
 	// Use this for initialization
 	protected override void Start () {
 		base.Start();
