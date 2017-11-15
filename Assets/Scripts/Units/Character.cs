@@ -55,4 +55,21 @@ public class Character {
 		Vector2 pos = this.positionInTheMap();
 		this.move( pos.x+1, pos.y );
 	}
+	// Diagonal
+	public void moveDownRight(){
+		Vector2 pos = this.positionInTheMap();
+		this.move( pos.x+1, pos.y-1 );
+	}
+	public void moveUpRight(){
+		Vector2 pos = this.positionInTheMap();
+		this.move( pos.x+1, pos.y+1 );
+	}
+	public void moveDownLeft(){
+		Vector2 pos = this.positionInTheMap();
+		this.move( pos.x-1, pos.y-1 );
+	}
+	public void moveUpLeft(){
+		Vector2 pos = this.positionInTheMap();
+		this.move( pos.x-1, pos.y+1 );
+	}
 }

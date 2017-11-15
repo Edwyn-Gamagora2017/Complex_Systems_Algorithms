@@ -236,10 +236,20 @@ public class Map {
 	 * CHARACTERS
 	 */
 	public void characterMove( Character c, float newX, float newY ){
-		int x = Mathf.RoundToInt(newX);
-		int y = Mathf.RoundToInt(newY);
-		if( this.isUsefulPosition( x, y ) ){
-			c.setPos( new Vector2(x, y) );
+		int new_x = Mathf.RoundToInt(newX);
+		int new_y = Mathf.RoundToInt(newY);
+
+		// Check if the new Position is a valid Tile
+		if( this.isUsefulPosition( new_x, new_y ) ){
+			int old_x = Mathf.RoundToInt(c.getPosX());
+			int old_y = Mathf.RoundToInt(c.getPosY());
+			int oldIndex = this.graphIndexFromTile ( old_x, old_y );
+			int newIndex = this.graphIndexFromTile ( new_x, new_y );
+
+			// Check if there is a edge between the new Position and the old one
+			if( this.graph.isAdjacent( oldIndex, newIndex ) != null ){
+				c.setPos( new Vector2(new_x, new_y) );
+			}
 		}
 	}
 
