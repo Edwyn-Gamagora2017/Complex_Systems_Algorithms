@@ -311,15 +311,17 @@ public class Map {
 
 			// Characters
 			// Players
-			int nPlayers = int.Parse( lines[lineIt][0] );
-			lineIt++;
+			int nPlayers = 1;
+			//int nPlayers = int.Parse( lines[lineIt][0] );
+			//lineIt++;
 			for( int i=0; i<nPlayers; i++ ){
 				Character c = new Character( new Vector2( int.Parse( lines[lineIt][0] ), int.Parse(lines[lineIt][1]) ), m );
 				if( m.checkCharacterPosition( c ) ){
 					m.addPlayer(c);
 				}
 				else{
-					Debug.LogError( "Map : the position of the player "+ i +" is incorrect." );
+					Debug.LogError( "Map : the position of the player "+ (i+1) +" is incorrect." );
+					throw new UnityEngine.UnityException( "Map : the position of the player "+ (i+1) +" is incorrect." );
 				}
 				lineIt++;
 			}
@@ -333,7 +335,8 @@ public class Map {
 					m.addEnemy(c);
 				}
 				else{
-					Debug.LogError( "Map : the position of the enemy "+i+" is incorrect." );
+					Debug.LogError( "Map : the position of the enemy "+(i+1)+" is incorrect." );
+					throw new UnityEngine.UnityException( "Map : the position of the enemy "+(i+1)+" is incorrect." );
 				}
 				lineIt++;
 			}

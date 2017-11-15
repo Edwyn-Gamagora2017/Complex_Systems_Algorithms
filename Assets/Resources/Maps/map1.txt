@@ -27,8 +27,6 @@
 0 3 0 3 3 3 3 0
 0 0 0 0 0 0 0 0
 
-# player amount
-1
 # player x y
 # 5 2
 3 6
