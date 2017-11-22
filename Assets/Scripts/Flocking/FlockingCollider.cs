@@ -19,9 +19,13 @@ public class FlockingCollider : MonoBehaviour {
 	public List<BoidBehaviour> getCollidingBoids(){
 		return this.collidingBoids;
 	}
+	public float getRadius(){
+		return this.gameObject.GetComponent< CircleCollider2D >().radius;
+	}
 
-	// Some boid entered the zone
+	// Some boids entered the zone
 	void OnTriggerEnter( Collider col ){
+		Debug.Log ("dsdq");
 		// Check if it a boid
 		BoidBehaviour boid = col.gameObject.GetComponent<BoidBehaviour>();
 		if( boid != null ){
@@ -29,7 +33,7 @@ public class FlockingCollider : MonoBehaviour {
 		}
 	}
 
-	// Some boid exited the zone
+	// Some boids exited the zone
 	void OnTriggerExit( Collider col ){
 		// Check if it a boid
 		BoidBehaviour boid = col.gameObject.GetComponent<BoidBehaviour>();
