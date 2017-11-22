@@ -16,7 +16,7 @@ public class BoidBehaviour : MonoBehaviour {
 	 * The boid will move close to the ones that are near
 	 * 		It obtains the average of positions
 	 */
-	/*void moveCloser(){
+	void moveCloser(){
 		Vector3 averagePosition = new Vector3();
 
 		List<BoidBehaviour> boids = moveCollider.getCollidingBoids();
@@ -29,13 +29,13 @@ public class BoidBehaviour : MonoBehaviour {
 		}
 
 		this.velocity += averagePosition / 100;
-	}*/
+	}
 
 	/**
 	 * The boid will move with the same velocity of the ones that are near
 	 * 		It obtains the average of velocities
 	 */
-	/*void moveWith(){
+	void moveWith(){
 		Vector3 averageVelocity = new Vector3();
 
 		List<BoidBehaviour> boids = moveCollider.getCollidingBoids();
@@ -48,13 +48,13 @@ public class BoidBehaviour : MonoBehaviour {
 		}
 
 		this.velocity += averageVelocity / 10;
-	}*/
+	}
 
 	/**
 	 * The boid will move away from the the ones that are too close
 	 * 		It obtains the average of positions
 	 */
-	/*void moveAway(){
+	void moveAway(){
 		Vector3 averagePosition = new Vector3();
 
 		List<BoidBehaviour> boids = closeCollider.getCollidingBoids();
@@ -66,13 +66,13 @@ public class BoidBehaviour : MonoBehaviour {
 		}
 
 		this.velocity += averagePosition / 10;
-	}*/
+	}
 
 	/**
 	 * The boid will move
 	 * 		It executes the functions to control the boid
 	 */
-	/*void move(){
+	void move(){
 		this.moveCloser ();
 		this.moveWith ();
 		this.moveAway ();
@@ -87,7 +87,7 @@ public class BoidBehaviour : MonoBehaviour {
 		Debug.Log (this.velocity);
 		// Move boid
 		this.transform.Translate( this.velocity );
-	}*/
+	}
 
 	public Vector3 getVelocity(){
 		return this.velocity;
@@ -104,10 +104,6 @@ public class BoidBehaviour : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
-	}
-
-	void OnTriggerEnter( Collider col ){
-		Debug.Log ("dsdq");
+		move ();
 	}
 }

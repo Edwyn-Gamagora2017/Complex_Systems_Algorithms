@@ -24,8 +24,7 @@ public class FlockingCollider : MonoBehaviour {
 	}
 
 	// Some boids entered the zone
-	void OnTriggerEnter( Collider col ){
-		Debug.Log ("dsdq");
+	void OnTriggerEnter2D( Collider2D col ){
 		// Check if it a boid
 		BoidBehaviour boid = col.gameObject.GetComponent<BoidBehaviour>();
 		if( boid != null ){
@@ -34,7 +33,7 @@ public class FlockingCollider : MonoBehaviour {
 	}
 
 	// Some boids exited the zone
-	void OnTriggerExit( Collider col ){
+	void OnTriggerExit2D( Collider2D col ){
 		// Check if it a boid
 		BoidBehaviour boid = col.gameObject.GetComponent<BoidBehaviour>();
 		if( boid != null ){
