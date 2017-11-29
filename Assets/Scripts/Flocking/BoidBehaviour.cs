@@ -10,7 +10,7 @@ public class BoidBehaviour : MonoBehaviour {
 	private FlockingCollider moveCollider;
 
 	private Vector3 velocity; // orientation and module of velocity
-	private float maxSpeed = 2;	// the maximum value for the module of the velocity vector
+	private float maxSpeed = 0.4f;	// the maximum value for the module of the velocity vector
 
 	/**
 	 * The boid will move close to the ones that are near
@@ -28,7 +28,7 @@ public class BoidBehaviour : MonoBehaviour {
 			averagePosition /= boids.Count;
 		}
 
-		this.velocity += averagePosition / 100;
+		this.velocity += averagePosition / 10;
 	}
 
 	/**
@@ -65,7 +65,7 @@ public class BoidBehaviour : MonoBehaviour {
 			averagePosition /= boids.Count;
 		}
 
-		this.velocity += averagePosition / 10;
+		this.velocity -= averagePosition / 10;
 	}
 
 	/**
@@ -83,8 +83,7 @@ public class BoidBehaviour : MonoBehaviour {
 			float factor = this.maxSpeed / currentSpeed;
 			this.velocity.Scale ( new Vector3( factor, factor, factor ) );
 		}
-
-		Debug.Log (this.velocity);
+			
 		// Move boid
 		this.transform.Translate( this.velocity );
 	}
@@ -93,9 +92,15 @@ public class BoidBehaviour : MonoBehaviour {
 		return this.velocity;
 	}
 
+	public void setVelocity( Vector3 newVelocity ){
+		this.velocity = newVelocity;
+		this.transform.Translate( this.velocity );
+	}
+
 	// Use this for initialization
 	void Awake () {
-		this.velocity = new Vector3 (0,0,0);
+		//this.velocity = new Vector3 (0.5f,0.1f,0);
+		this.velocity = new Vector3 (1/(float)Random.Range(1,10),1/(float)Random.Range(1,10),0);
 	}
 
 	void Start () {

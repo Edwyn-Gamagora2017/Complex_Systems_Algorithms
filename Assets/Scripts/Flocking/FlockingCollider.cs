@@ -6,15 +6,15 @@ public class FlockingCollider : MonoBehaviour {
 
 	List<BoidBehaviour> collidingBoids ;
 
-	// Use this for initialization
-	void Start () {
+	void Awake () {
 		this.collidingBoids = new List<BoidBehaviour>();
 	}
+
+	// Use this for initialization
+	void Start () {}
 	
 	// Update is called once per frame
-	void Update () {
-		
-	}
+	void Update () {}
 
 	public List<BoidBehaviour> getCollidingBoids(){
 		return this.collidingBoids;
