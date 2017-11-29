@@ -152,8 +152,16 @@ public class BoidBehaviour : MonoBehaviour {
 	public void setVelocity( Vector3 newVelocity ){
 		this.velocity = newVelocity;
 
-		this.transform.position += this.velocity;
 		this.transform.rotation = Quaternion.FromToRotation( Vector3.right, this.velocity );
+
+		// Check if the obstacles does not block the movement
+		Vector3 newPosition = this.transform.position + this.velocity;
+		foreach( ObstacleBoid obst in obstacleCollider.getCollidingObstacles() ){
+			if( obst.collisionPosition( newPosition ) ){
+				return;
+			}
+		}
+		this.transform.position = newPosition;
 	}
 
 	public void setTarget( GameObject newTarget ){

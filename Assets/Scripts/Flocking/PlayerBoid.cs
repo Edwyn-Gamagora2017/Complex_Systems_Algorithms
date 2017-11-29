@@ -11,6 +11,9 @@ public class PlayerBoid : MonoBehaviour {
 	private float width;
 	private float height;
 
+	[SerializeField]
+	private ObstacleCollider obstacleCollider;
+
 	// Use this for initialization
 	void Start () {
 		if( camera == null ){
@@ -40,6 +43,11 @@ public class PlayerBoid : MonoBehaviour {
 
 	void UpdatePosition( Vector3 newPosition ){
 		if( newPosition.x > -width/2f && newPosition.x < width/2f && newPosition.y > -height/2f && newPosition.y < height/2f ){
+			foreach( ObstacleBoid obst in obstacleCollider.getCollidingObstacles() ){
+				if( obst.collisionPosition( newPosition ) ){
+					return;
+				}
+			}
 			this.transform.position = newPosition;
 		}
 	}

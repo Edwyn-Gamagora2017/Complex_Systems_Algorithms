@@ -4,19 +4,9 @@ using UnityEngine;
 
 public class ObstacleBoid : MonoBehaviour {
 
-	float width = 1f;
-	float height = 1f;
-
-	public float Width {
-		get {
-			return width;
-		}
-	}
-
-	public float Height {
-		get {
-			return height;
-		}
+	public bool collisionPosition( Vector3 pos ){
+		return pos.x >= this.transform.position.x - this.transform.localScale.x/2 && pos.x <= this.transform.position.x + this.transform.localScale.x/2 &&
+			pos.y >= this.transform.position.y - this.transform.localScale.y/2 && pos.y <= this.transform.position.y + this.transform.localScale.y/2;
 	}
 
 	// Use this for initialization
