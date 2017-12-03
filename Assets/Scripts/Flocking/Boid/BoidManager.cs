@@ -12,11 +12,15 @@ public class BoidManager : MonoBehaviour {
 	[SerializeField]
 	private GameObject player;
 
+	[SerializeField]
+	private GameObject border;
+
 	// Use this for initialization
 	void Start () {
 		for( int i = 0; i < amountBoids; i++ ){
 			GameObject boid = Instantiate( boidPrefab );
 			boid.GetComponent<BoidBehaviour>().setTarget( player );
+			boid.GetComponent<WallCollider>().setBorders( border );
 		}
 	}
 	

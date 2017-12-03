@@ -15,6 +15,7 @@ public class BoidBehaviour : MonoBehaviour {
 
 	private Vector3 velocity; // orientation and module of velocity
 	private float maxSpeed = 0.4f;	// the maximum value for the module of the velocity vector
+	private float maxRotationAngleStepDegrees = 15;	// The boid is not allowed to rotate more than this value
 
 	[SerializeField]
 	GameObject target;			// target to be tracked by the boid
@@ -39,7 +40,7 @@ public class BoidBehaviour : MonoBehaviour {
 	 * The boid will move close to the ones that are near
 	 * 		It obtains the average of positions
 	 */
-	void moveCloser(){
+	Vector3 moveCloser(){
 		Vector3 averagePosition = new Vector3();
 
 		List<BoidBehaviour> boids = selectFieldView( attractionCollider.getCollidingBoids() );
@@ -51,14 +52,14 @@ public class BoidBehaviour : MonoBehaviour {
 			averagePosition /= boids.Count;
 		}
 
-		this.velocity += averagePosition / 40;
+		return averagePosition / 40;
 	}
 
 	/**
 	 * The boid will move with the same velocity of the ones that are near
 	 * 		It obtains the average of velocities
 	 */
-	void moveWith(){
+	Vector3 moveWith(){
 		Vector3 averageVelocity = new Vector3();
 
 		List<BoidBehaviour> boids = selectFieldView( alignmentCollider.getCollidingBoids() );
@@ -70,14 +71,14 @@ public class BoidBehaviour : MonoBehaviour {
 			averageVelocity /= boids.Count;
 		}
 
-		this.velocity += averageVelocity / 5;
+		return averageVelocity / 5;
 	}
 
 	/**
 	 * The boid will move away from the the ones that are too close
 	 * 		It obtains the average of positions
 	 */
-	void moveAway(){
+	Vector3 moveAway(){
 		Vector3 averagePosition = new Vector3();
 
 		List<BoidBehaviour> boids = selectFieldView( repulsionCollider.getCollidingBoids() );
@@ -88,24 +89,24 @@ public class BoidBehaviour : MonoBehaviour {
 			averagePosition /= boids.Count;
 		}
 
-		this.velocity -= averagePosition / 10;
+		return -( averagePosition / 10 );
 	}
 
 	/**
 	 * The boid will move towards the target
 	 * 		based on its position
 	 */
-	void moveTarget(){
+	Vector3 moveTarget(){
 		Vector3 targetDirection = target.gameObject.transform.position - transform.position;
 
-		this.velocity += targetDirection.normalized / 100;
+		return targetDirection.normalized / 100;
 	}
 
 	/**
 	 * The boid will avoid the obstacles
 	 * 		based on their positions and distance
 	 */
-	void avoidObstacles(){
+	Vector3 avoidObstacles(){
 		Vector3 averageDistance = new Vector3();
 
 		List<ObstacleBoid> obstacles = obstacleCollider.getCollidingObstacles();
@@ -113,14 +114,16 @@ public class BoidBehaviour : MonoBehaviour {
 		foreach( ObstacleBoid obst in obstacles ){
 			// The closer to the object, the bigger the distance added to the average
 			Vector3 dirToObst = obst.transform.position - transform.position;
-			float distancefromObstacleToCollider = colliderDistance - dirToObst.magnitude;
-			averageDistance += dirToObst.normalized*distancefromObstacleToCollider;
+			/*float distancefromObstacleToCollider = colliderDistance - dirToObst.magnitude;
+			averageDistance += dirToObst.normalized*distancefromObstacleToCollider;*/
+			averageDistance += dirToObst;
 		}
 		if (obstacles.Count > 0) {
 			averageDistance /= obstacles.Count;
 		}
 
-		this.velocity -= averageDistance / (20*colliderDistance);
+		//return -( averageDistance / (10*colliderDistance) );
+		return -( averageDistance / 185 );
 	}
 
 	/**
@@ -128,11 +131,30 @@ public class BoidBehaviour : MonoBehaviour {
 	 * 		It executes the functions to control the boid
 	 */
 	void move(){
-		this.moveCloser ();
-		this.moveWith ();
-		this.moveAway ();
-		this.moveTarget();
-		this.avoidObstacles();
+		Vector3 partialVelocity = this.moveCloser ();
+		partialVelocity 		+= this.moveWith ();
+		partialVelocity 		+= this.moveAway ();
+		partialVelocity 		+= this.moveTarget();
+		partialVelocity 		+= this.avoidObstacles();
+			
+		// Move boid
+		this.setVelocity( this.velocity+partialVelocity, true );
+	}
+
+	public Vector3 getVelocity(){
+		return this.velocity;
+	}
+
+	public void setVelocity( Vector3 newVelocity, bool smoothRotation ){
+		// Avoiding high angle rotation
+		if( smoothRotation && Vector3.Angle( this.velocity.normalized, newVelocity.normalized ) > maxRotationAngleStepDegrees ){
+			//newVelocity = Quaternion.Euler( 0,0,maxRotationAngleStepDegrees )*this.velocity;
+			Vector3 rotationVelocity = Vector3.RotateTowards( this.velocity.normalized, newVelocity.normalized, maxRotationAngleStepDegrees*Mathf.Deg2Rad, 0f );
+			rotationVelocity *= newVelocity.magnitude;
+			rotationVelocity.Scale( new Vector3(1,1,0) );
+			newVelocity = rotationVelocity;
+		}
+		this.velocity = newVelocity;
 
 		// Check velocity module
 		float currentSpeed = this.velocity.magnitude;
@@ -140,22 +162,14 @@ public class BoidBehaviour : MonoBehaviour {
 			float factor = this.maxSpeed / currentSpeed;
 			this.velocity.Scale ( new Vector3( factor, factor, factor ) );
 		}
-			
-		// Move boid
-		this.setVelocity( this.velocity );
-	}
-
-	public Vector3 getVelocity(){
-		return this.velocity;
-	}
-
-	public void setVelocity( Vector3 newVelocity ){
-		this.velocity = newVelocity;
 
 		this.transform.rotation = Quaternion.FromToRotation( Vector3.right, this.velocity );
 
-		// Check if the obstacles does not block the movement
-		Vector3 newPosition = this.transform.position + this.velocity;
+		setPosition( this.transform.position + this.velocity );
+	}
+
+	// Check if the obstacles does not block the movement
+	public void setPosition( Vector3 newPosition ){
 		foreach( ObstacleBoid obst in obstacleCollider.getCollidingObstacles() ){
 			if( obst.collisionPosition( newPosition ) ){
 				return;
@@ -176,7 +190,7 @@ public class BoidBehaviour : MonoBehaviour {
 	}
 
 	void Start () {
-		//InvokeRepeating ( "move", 0, 0.3f );
+		//InvokeRepeating ( "move", 0, 0.05f );
 	}
 	
 	// Update is called once per frame

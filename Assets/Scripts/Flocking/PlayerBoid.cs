@@ -8,6 +8,10 @@ public class PlayerBoid : MonoBehaviour {
 
 	[SerializeField]
 	Camera camera = null;
+
+	[SerializeField]
+	GameObject borders;
+
 	private float width;
 	private float height;
 
@@ -16,12 +20,14 @@ public class PlayerBoid : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		height = borders.transform.localScale.y;
+		width = borders.transform.localScale.x;
+
 		if( camera == null ){
 			camera = Camera.main;
+			camera.orthographicSize = height/2;
+			camera.aspect = width/height;
 		}
-
-		height = this.camera.orthographicSize*2;
-		width = height*this.camera.aspect;
 	}
 	
 	// Update is called once per frame

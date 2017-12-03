@@ -9,13 +9,15 @@ public class WallCollider : MonoBehaviour {
 	[SerializeField]
 	bool invertDirection = false;
 
+	private GameObject borders;
+
 	private float width;
 	private float height;
 
 	private BoidBehaviour boid;
 
-	public void setCamera( Camera newCamera ){
-		this.camera = newCamera;
+	public void setBorders(GameObject newBorders){
+		this.borders = newBorders;
 	}
 
 	// Use this for initialization
@@ -24,8 +26,13 @@ public class WallCollider : MonoBehaviour {
 			camera = Camera.main;
 		}
 
+		// Borders based on cameras - WRONG
+		/*
 		height = this.camera.orthographicSize*2;
 		width = height*this.camera.aspect;
+		*/
+		height = borders.transform.localScale.y;
+		width = borders.transform.localScale.x;
 
 		boid = GetComponent<BoidBehaviour>();
 	}
@@ -35,7 +42,7 @@ public class WallCollider : MonoBehaviour {
 		checkBounds();
 	}
 
-	void checkBounds(){
+	public void checkBounds(){
 		if( invertDirection ){
 			// Invert movement
 			Vector3 oldVelocity = boid.getVelocity();
@@ -65,7 +72,7 @@ public class WallCollider : MonoBehaviour {
 
 				Vector3 newVelocity = (-2)*scalaire*normal + oldVelocity.normalized;
 				newVelocity *= oldVelocity.magnitude;
-				boid.setVelocity( newVelocity );
+				boid.setVelocity( newVelocity, false );
 			}
 		}
 		else{
