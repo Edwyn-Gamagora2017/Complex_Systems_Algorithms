@@ -4,14 +4,16 @@ using UnityEngine;
 
 public class BoidBehaviour : MonoBehaviour {
 
-	[SerializeField]
+	/*[SerializeField]
 	private FlockingCollider repulsionCollider;
 	[SerializeField]
 	private FlockingCollider alignmentCollider;
 	[SerializeField]
 	private FlockingCollider attractionCollider;
 	[SerializeField]
-	private ObstacleCollider obstacleCollider;
+	private ObstacleCollider obstacleCollider;*/
+
+	public BoidManager manager;
 
 	private Vector3 velocity; // orientation and module of velocity
 	private float maxSpeed = 0.4f;	// the maximum value for the module of the velocity vector
@@ -24,12 +26,12 @@ public class BoidBehaviour : MonoBehaviour {
 	[SerializeField]
 	float angleFieldView = 90;	// Angle of the Field View (degrees)
 
-	List<BoidBehaviour> selectFieldView( List<BoidBehaviour> insideRadius ){
+	List<GameObject> selectFieldView( List<GameObject> insideRadius ){
 		if( !BoidBehaviour.considerAngleOfView )
 			return insideRadius;
 		else{
-			List<BoidBehaviour> result = new List<BoidBehaviour>();
-			foreach( BoidBehaviour b in insideRadius ){
+			List<GameObject> result = new List<GameObject>();
+			foreach( GameObject b in insideRadius ){
 				Vector3 directionToBoid = b.gameObject.transform.position - this.transform.position;
 				float angle = Vector3.Angle( this.velocity, directionToBoid );
 				if( angle >= -angleFieldView/2f && angle <= angleFieldView/2f ){
@@ -40,11 +42,11 @@ public class BoidBehaviour : MonoBehaviour {
 		}
 	}
 
-	List<BoidBehaviour> selectInRadius( List<BoidBehaviour> allBoids, float radius ){
-		List<BoidBehaviour> result = new List<BoidBehaviour>();
-		foreach( BoidBehaviour b in allBoids ){
-			Vector3 directionToBoid = b.gameObject.transform.position - this.transform.position;
-			if( directionToBoid.magnitude <= radius ){
+	List<GameObject> selectInRadius( List<GameObject> allObjects, float radius ){
+		List<GameObject> result = new List<GameObject>();
+		foreach( GameObject b in allObjects ){
+			Vector3 directionToObject = b.gameObject.transform.position - this.transform.position;
+			if( directionToObject.magnitude <= radius ){
 				result.Add( b );
 			}
 		}
@@ -55,11 +57,11 @@ public class BoidBehaviour : MonoBehaviour {
 	 * The boid will move close to the ones that are near
 	 * 		It obtains the average of positions
 	 */
-	Vector3 moveCloser(){
+	Vector3 moveCloser( List<GameObject> boids ){
 		Vector3 averagePosition = new Vector3();
 
-		List<BoidBehaviour> boids = selectFieldView( attractionCollider.getCollidingBoids() );
-		foreach( BoidBehaviour boid in boids ){
+		//List<BoidBehaviour> boids = selectFieldView( attractionCollider.getCollidingBoids() );
+		foreach( GameObject boid in boids ){
 			// average of vector from the boid to the close one
 			averagePosition += boid.transform.position - this.transform.position;
 		}
@@ -74,13 +76,13 @@ public class BoidBehaviour : MonoBehaviour {
 	 * The boid will move with the same velocity of the ones that are near
 	 * 		It obtains the average of velocities
 	 */
-	Vector3 moveWith(){
+	Vector3 moveWith( List<GameObject> boids ){
 		Vector3 averageVelocity = new Vector3();
 
-		List<BoidBehaviour> boids = selectFieldView( alignmentCollider.getCollidingBoids() );
-		foreach( BoidBehaviour boid in boids ){
+		//List<BoidBehaviour> boids = selectFieldView( alignmentCollider.getCollidingBoids() );
+		foreach( GameObject boid in boids ){
 			// average of differences between the velocities
-			averageVelocity += boid.getVelocity() - this.velocity;
+			averageVelocity += boid.GetComponent<BoidBehaviour>().getVelocity() - this.velocity;
 		}
 		if (boids.Count > 0) {
 			averageVelocity /= boids.Count;
@@ -93,11 +95,11 @@ public class BoidBehaviour : MonoBehaviour {
 	 * The boid will move away from the the ones that are too close
 	 * 		It obtains the average of positions
 	 */
-	Vector3 moveAway(){
+	Vector3 moveAway( List<GameObject> boids ){
 		Vector3 averagePosition = new Vector3();
 
-		List<BoidBehaviour> boids = selectFieldView( repulsionCollider.getCollidingBoids() );
-		foreach( BoidBehaviour boid in boids ){
+		//List<BoidBehaviour> boids = selectFieldView( repulsionCollider.getCollidingBoids() );
+		foreach( GameObject boid in boids ){
 			averagePosition += boid.transform.position - this.transform.position;
 		}
 		if (boids.Count > 0) {
@@ -121,12 +123,12 @@ public class BoidBehaviour : MonoBehaviour {
 	 * The boid will avoid the obstacles
 	 * 		based on their positions and distance
 	 */
-	Vector3 avoidObstacles(){
+	Vector3 avoidObstacles( List<GameObject> obstacles ){
 		Vector3 averageDistance = new Vector3();
 
-		List<ObstacleBoid> obstacles = obstacleCollider.getCollidingObstacles();
-		float colliderDistance = obstacleCollider.getRadius();
-		foreach( ObstacleBoid obst in obstacles ){
+		//List<ObstacleBoid> obstacles = obstacleCollider.getCollidingObstacles();
+		//float colliderDistance = obstacleCollider.getRadius();
+		foreach( GameObject obst in obstacles ){
 			// The closer to the object, the bigger the distance added to the average
 			Vector3 dirToObst = obst.transform.position - transform.position;
 			/*float distancefromObstacleToCollider = colliderDistance - dirToObst.magnitude;
@@ -146,11 +148,15 @@ public class BoidBehaviour : MonoBehaviour {
 	 * 		It executes the functions to control the boid
 	 */
 	void move(){
-		Vector3 partialVelocity = this.moveCloser ();
-		partialVelocity 		+= this.moveWith ();
-		partialVelocity 		+= this.moveAway ();
+		List<GameObject> boids = selectFieldView( selectInRadius( manager.AllBoids, 6 ) );
+
+		Vector3 partialVelocity = this.moveCloser ( boids );
+		boids = selectInRadius( boids, 3 );
+		partialVelocity 		+= this.moveWith ( boids );
+		boids = selectInRadius( boids, 1 );
+		partialVelocity 		+= this.moveAway ( boids );
 		partialVelocity 		+= this.moveTarget();
-		partialVelocity 		+= this.avoidObstacles();
+		partialVelocity 		+= this.avoidObstacles( selectFieldView( selectInRadius( manager.AllObstacles, 6 ) ) );
 			
 		// Move boid
 		this.setVelocity( this.velocity+partialVelocity, true );
@@ -185,8 +191,8 @@ public class BoidBehaviour : MonoBehaviour {
 
 	// Check if the obstacles does not block the movement
 	public void setPosition( Vector3 newPosition ){
-		foreach( ObstacleBoid obst in obstacleCollider.getCollidingObstacles() ){
-			if( obst.collisionPosition( newPosition ) ){
+		foreach( GameObject obst in manager.AllObstacles ){
+			if( obst.GetComponent<ObstacleBoid>().collisionPosition( newPosition ) ){
 				return;
 			}
 		}
