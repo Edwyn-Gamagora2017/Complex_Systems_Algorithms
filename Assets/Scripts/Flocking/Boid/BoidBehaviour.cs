@@ -20,16 +20,31 @@ public class BoidBehaviour : MonoBehaviour {
 	[SerializeField]
 	GameObject target;			// target to be tracked by the boid
 
+	public static bool considerAngleOfView = false;
 	[SerializeField]
 	float angleFieldView = 90;	// Angle of the Field View (degrees)
 
 	List<BoidBehaviour> selectFieldView( List<BoidBehaviour> insideRadius ){
-		return insideRadius;
+		if( !BoidBehaviour.considerAngleOfView )
+			return insideRadius;
+		else{
+			List<BoidBehaviour> result = new List<BoidBehaviour>();
+			foreach( BoidBehaviour b in insideRadius ){
+				Vector3 directionToBoid = b.gameObject.transform.position - this.transform.position;
+				float angle = Vector3.Angle( this.velocity, directionToBoid );
+				if( angle >= -angleFieldView/2f && angle <= angleFieldView/2f ){
+					result.Add( b );
+				}
+			}
+			return result;
+		}
+	}
+
+	List<BoidBehaviour> selectInRadius( List<BoidBehaviour> allBoids, float radius ){
 		List<BoidBehaviour> result = new List<BoidBehaviour>();
-		foreach( BoidBehaviour b in insideRadius ){
+		foreach( BoidBehaviour b in allBoids ){
 			Vector3 directionToBoid = b.gameObject.transform.position - this.transform.position;
-			float angle = Vector3.Angle( this.velocity, directionToBoid );
-			if( angle >= -angleFieldView/2f && angle <= angleFieldView/2f ){
+			if( directionToBoid.magnitude <= radius ){
 				result.Add( b );
 			}
 		}
