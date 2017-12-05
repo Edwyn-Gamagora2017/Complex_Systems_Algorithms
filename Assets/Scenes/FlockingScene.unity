@@ -530,7 +530,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   boidPrefab: {fileID: 1211096385298676, guid: e823aa20a88874149884cb3eb5b435b0, type: 2}
-  amountBoids: 15
+  amountBoids: 80
   player: {fileID: 1980765013}
   border: {fileID: 414951492}
 --- !u!1 &339799401
