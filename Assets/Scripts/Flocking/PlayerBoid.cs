@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerBoid : MonoBehaviour {
 
-	private float moveStep = 0.3f;
+	private float moveStep = 0.5f;
 
 	[SerializeField]
 	Camera camera = null;

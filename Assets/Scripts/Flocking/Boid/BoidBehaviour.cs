@@ -16,7 +16,7 @@ public class BoidBehaviour : MonoBehaviour {
 	public BoidManager manager;
 
 	private Vector3 velocity; // orientation and module of velocity
-	private float maxSpeed = 0.4f;	// the maximum value for the module of the velocity vector
+	private float maxSpeed = 0.2f;	// the maximum value for the module of the velocity vector
 	private float maxRotationAngleStepDegrees = 15;	// The boid is not allowed to rotate more than this value
 
 	[SerializeField]
@@ -106,7 +106,7 @@ public class BoidBehaviour : MonoBehaviour {
 			averagePosition /= boids.Count;
 		}
 
-		return -( averagePosition / 10 );
+		return -( averagePosition / 2 );
 	}
 
 	/**
@@ -116,7 +116,7 @@ public class BoidBehaviour : MonoBehaviour {
 	Vector3 moveTarget(){
 		Vector3 targetDirection = target.gameObject.transform.position - transform.position;
 
-		return targetDirection.normalized / 100;
+		return targetDirection.normalized / 20;
 	}
 
 	/**
@@ -140,7 +140,7 @@ public class BoidBehaviour : MonoBehaviour {
 		}
 
 		//return -( averageDistance / (10*colliderDistance) );
-		return -( averageDistance / 185 );
+		return -( averageDistance / 35 );
 	}
 
 	/**
@@ -156,7 +156,8 @@ public class BoidBehaviour : MonoBehaviour {
 		boids = selectInRadius( boids, 1 );
 		partialVelocity 		+= this.moveAway ( boids );
 		partialVelocity 		+= this.moveTarget();
-		partialVelocity 		+= this.avoidObstacles( selectFieldView( selectInRadius( manager.AllObstacles, 6 ) ) );
+		//partialVelocity 		+= this.avoidObstacles( selectFieldView( selectInRadius( manager.AllObstacles, 6 ) ) );
+		partialVelocity 		+= this.avoidObstacles( selectInRadius( manager.AllObstacles, 6 ) );
 			
 		// Move boid
 		this.setVelocity( this.velocity+partialVelocity, true );
