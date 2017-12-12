@@ -1,0 +1,37 @@
+# Types
+# 0 Wall
+# 1 Grass
+# 2 Water
+# 3 Rock
+# 4 Mud
+
+# Map format: H W 4neighborhood
+10 8 0
+
+# Cost for type of terrain
+# type cost (wall is not considered)
+1 1
+2 2
+3 0
+4 3
+
+# Map format: types ( 0,0 -> bottom left ); it will ignore values that are not types (such as 5, in this example)
+0 0 0 0 0 0 0 0
+0 1 0 1 1 1 1 0
+0 1 0 1 1 1 0 5
+0 1 1 2 2 1 0 5
+0 1 4 2 2 2 2 0
+0 3 4 0 0 0 0 0
+0 3 3 3 4 3 3 0
+0 3 0 3 4 3 3 0
+0 3 0 3 3 3 3 0
+0 0 0 0 0 0 0 0
+
+# player x y
+6 5
+
+# target amount
+2
+# target x y
+5 7 0
+1 1 0

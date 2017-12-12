@@ -117,6 +117,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1904329704}
   - component: {fileID: 1904329703}
+  - component: {fileID: 1904329705}
+  - component: {fileID: 1904329706}
   m_Layer: 0
   m_Name: GameController
   m_TagString: Untagged
@@ -148,6 +150,32 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1904329705
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1904329702}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c1598e0635e6ff4a8d916d56e04eb7f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mapPath: {fileID: 4900000, guid: 2277654c364c49942adb797bc14a5d62, type: 3}
+--- !u!114 &1904329706
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1904329702}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18cba3e9e81e9474b8abe9ba492a30bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mapContainer: {fileID: 1904329702}
+  mapTilePrefab: {fileID: 1189613598780064, guid: 3feac82f0a4240542a44923a76bc2af4,
+    type: 2}
 --- !u!1 &2131213396
 GameObject:
   m_ObjectHideFlags: 0
