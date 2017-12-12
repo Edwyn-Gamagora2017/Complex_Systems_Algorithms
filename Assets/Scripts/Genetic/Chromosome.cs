@@ -3,9 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class Chromosome : System.IComparable<Chromosome> {
+	public Chromosome (){}
+
+	public abstract void setRandomValue();
 	protected abstract float fitness();
 	public abstract Chromosome crossing( Chromosome c );
-	public abstract void mutation();
+	public abstract void mutation( int mutationPropabiblity );
+	public abstract bool isBetterThan( Chromosome c );
+	public abstract bool isFinalSolution();
+	public abstract bool isValid();
+
+	public abstract string toString ();
 
 	#region IComparable implementation
 
