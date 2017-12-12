@@ -30,14 +30,14 @@ public abstract class VertexInfo{
 public class PathVertexInfo{
 	private VertexInfo vertex;			// Vertex associated to the information
 	private PathVertexInfo previousVertex;		// the previous Vertex in the path
-	private float costFromPrevious;				// the cost of the edge from the previous Vertex in the path
+	//private float costFromPrevious;				// the cost of the edge from the previous Vertex in the path
 	private float distanceToVertex;		// Distance acumulated until arriving to the vertex
-	private bool visited;				// Idicates if the vertex was processed by the algorithms
+	private bool visited;				// Indicates if the vertex was processed by the algorithms
 
 	public PathVertexInfo( VertexInfo vertex, float distanceToVertex = 0 ){
 		this.vertex = vertex;
 		this.previousVertex = null;
-		this.costFromPrevious = 0;
+		//this.costFromPrevious = 0;
 		this.distanceToVertex = distanceToVertex;
 		this.visited = false;
 	}
@@ -59,6 +59,9 @@ public class PathVertexInfo{
 		}
 	}
 	public PathVertexInfo PreviousVertex {
+		get {
+			return previousVertex;
+		}
 		set {
 			previousVertex = value;
 		}
@@ -68,14 +71,14 @@ public class PathVertexInfo{
 			return previousVertex.VertexIndex;
 		}
 	}
-	public float CostFromPrevious {
+	/*public float CostFromPrevious {
 		get {
 			return costFromPrevious;
 		}
 		set {
 			costFromPrevious = value;
 		}
-	}
+	}*/
 	public VertexInfo Vertex {
 		get {
 			return vertex;
@@ -107,6 +110,16 @@ public class PathVertexInfo{
 
 		return result;
 	}
+	// Obtains the string that represents the path
+	public static string pathToString( List<PathVertexInfo> path ){
+		string resPath = "";
+
+		foreach( PathVertexInfo v in path ){
+			resPath += v.VertexIndex + " -> ";
+		}
+
+		return resPath;
+	}
 };
 
 public class Graph {
@@ -127,6 +140,7 @@ public class Graph {
 	bool multipleEdge;			// Indicates if the graph accepts multiple edges connecting the same pair of vertices
 	VertexInfo[] vertices;		// List of information about the vertices
 	List<Adjacent>[] adjacency;	// List of adjacency
+	PathVertexInfo[,] allDistances;	// all distances - calculated by the algorithm of Floyd Warshall
 
 	public Graph( int nVertices, bool bidirectional, bool multipleEdge )
 	{
@@ -246,7 +260,7 @@ public class Graph {
 						PathVertexInfo neighborVertex = info[ neighbor.index ];
 						neighborVertex.DistanceToVertex = currentVertex.DistanceToVertex + neighbor.edgeWeight + neighborVertex.VertexCost;
 						neighborVertex.PreviousVertex = currentVertex;
-						neighborVertex.CostFromPrevious = neighbor.edgeWeight;
+						//neighborVertex.CostFromPrevious = neighbor.edgeWeight;
 						// Add neighbor
 						open.Add( neighborVertex );
 					}
@@ -314,7 +328,7 @@ public class Graph {
 						if( neighborVertex.DistanceToVertex > newDistance ){
 							neighborVertex.DistanceToVertex = newDistance;
 							neighborVertex.PreviousVertex = currentVertex;
-							neighborVertex.CostFromPrevious = neighbor.edgeWeight;
+							//neighborVertex.CostFromPrevious = neighbor.edgeWeight;
 						}
 						// Add neighbor
 						if( !vertexAlreadyInList( neighbor.index, open ) ){
@@ -335,8 +349,76 @@ public class Graph {
 		return null;
 	}
 
+	// Calculates the smallest path among all vertices
+	public void floydWarshall(){
+
+		this.allDistances = new PathVertexInfo[ this.vertices.Length, this.vertices.Length ];
+
+		// initializing distances
+		for (int i = 0; i < this.vertices.Length; i++) {
+			this.allDistances [i, i] = new PathVertexInfo (this.vertices [i], 0);
+
+			for (int j = 0; j < this.vertices.Length; j++) {
+				if (i != j) {
+					Adjacent adj = this.isAdjacent (i, j);
+					if (adj != null) {
+						this.allDistances [i, j] = new PathVertexInfo (this.vertices [j],this.vertices [j].VertexCost + adj.edgeWeight + this.allDistances[i,i].DistanceToVertex);
+						this.allDistances [i, j].PreviousVertex = this.allDistances[i,i];
+					} else {
+						this.allDistances [i, j] = new PathVertexInfo (this.vertices [j], float.MaxValue);
+					}
+				}
+			}
+		}
+
+		for (int k = 0; k < this.vertices.Length; k++) {
+			for (int i = 0; i < this.vertices.Length; i++) {
+				for (int j = 0; j < this.vertices.Length; j++) {
+					if (allDistances [i, j].DistanceToVertex > allDistances [i, k].DistanceToVertex + allDistances [k, j].DistanceToVertex) {
+						allDistances [i, j].DistanceToVertex = allDistances [i, k].DistanceToVertex + allDistances [k, j].DistanceToVertex;
+						allDistances [i, j].PreviousVertex = allDistances [k, j].PreviousVertex;
+					}
+				}
+			}
+		}
+
+		for (int i = 0; i < this.vertices.Length; i++) {
+			for (int j = 0; j < this.vertices.Length; j++) {
+				float distanceWithStart = allDistances [i, j].DistanceToVertex + this.vertices [i].VertexCost;
+				// not overflow
+				if (distanceWithStart > 0) {
+					allDistances [i, j].DistanceToVertex = distanceWithStart;
+				}
+			}
+		}
+	}
+	// Obtains the path to achieve the vertex (based on FloydWarshall)
+	public List<PathVertexInfo> pathToFloydWarshall( int indexStart, int indexEnd ){
+		List<PathVertexInfo> result = new List<PathVertexInfo>();
+		if( this.allDistances != null ){
+			PathVertexInfo current = this.allDistances [indexStart, indexEnd];
+
+			while( current != null ){
+				result.Add( current );
+				if (current.PreviousVertex != null) {
+					current = allDistances [indexStart, current.PreviousVertex.Vertex.VertexIndex];
+				} else {
+					current = null;
+				}
+			}
+		}
+
+		return result;
+	}
+	public float getFloydWarshallDistance( int indexStart, int indexEnd ){
+		if (this.allDistances != null) {
+			return this.allDistances [indexStart, indexEnd].DistanceToVertex;
+		}
+		return float.MaxValue;
+	}
+
 	/*
-	 * ====  INPUT and OUTPUT ====
+	 * ==== INPUT and OUTPUT ====
 	 */
 	public string toString()
 	{
