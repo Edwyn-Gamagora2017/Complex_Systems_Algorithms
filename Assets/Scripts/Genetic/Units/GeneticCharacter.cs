@@ -7,6 +7,12 @@ public class GeneticCharacter {
 	protected Vector2 position;
 	protected MapGenetic map;
 
+	public MapGenetic Map {
+		get {
+			return map;
+		}
+	}
+
 	public GeneticCharacter( Vector2 pos, MapGenetic map ){
 		this.position = pos;
 		this.map = map;

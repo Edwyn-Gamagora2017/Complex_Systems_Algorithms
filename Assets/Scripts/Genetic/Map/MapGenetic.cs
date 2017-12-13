@@ -41,7 +41,6 @@ public class MapGenetic {
 	private Dictionary<MapTileType, float> mapTileTypeCost;	// Indicates the Cost of each TileType
 	private	Graph graph;				// the representation of the map as a graph
 
-	GeneticPlayer player;						// Player
 	List<GeneticTarget> targets;		// Targets
 
 	public MapGenetic( int height, int width, bool neighborhood4, bool bidirectional ){
@@ -49,7 +48,6 @@ public class MapGenetic {
 		this.width = width;
 		this.neighborhood4 = neighborhood4;
 		this.mapTileTypeCost = new Dictionary<MapTileType, float>();
-		this.player = new GeneticPlayer( new Vector2(), this );
 		this.targets = new List<GeneticTarget>();
 
 		// Creating empty matrix
@@ -66,11 +64,6 @@ public class MapGenetic {
 	}
 
 	/* PROPERTIES */
-	public GeneticPlayer Player {
-		get {
-			return player;
-		}
-	}
 	public List<GeneticTarget> Targets {
 		get {
 			return targets;
@@ -100,6 +93,9 @@ public class MapGenetic {
 		else{
 			return MapTileType.NotDefined;
 		}
+	}
+	public TileInfo getTile(int index){
+		return (TileInfo)this.graph.getVertex( index );
 	}
 	// returns the cost for a given type
 	public float getMapTileTypeCost( MapTileType type ){
@@ -210,9 +206,6 @@ public class MapGenetic {
 	public float getCharacterPositionCost( GeneticCharacter c ){
 		return this.mapTiles[ getCharacterPositionY(c) ][ getCharacterPositionX(c) ].VertexCost;
 	}
-	public void setPlayer( GeneticPlayer player ){
-		this.player = player;
-	}
 	public void addTarget( GeneticTarget target ){
 		this.targets.Add (target);
 	}
@@ -318,23 +311,7 @@ public class MapGenetic {
 				m.addTile( x, height-1-y, MapGenetic.typeIndexToType( int.Parse(mapLine[x]) ) );
 				}
 			}
-
-			// Characters
-			// Players
-			int nPlayers = 1;
-			//int nPlayers = int.Parse( lines[lineIt][0] );
-			//lineIt++;
-			for( int i=0; i<nPlayers; i++ ){
-				GeneticPlayer p = new GeneticPlayer( new Vector2( int.Parse( lines[lineIt][0] ), int.Parse(lines[lineIt][1]) ), m );
-				if( m.checkCharacterPosition( p ) ){
-					m.setPlayer( p );
-				}
-				else{
-					Debug.LogError( "Map : the position of the player "+ (i+1) +" is incorrect." );
-					throw new UnityEngine.UnityException( "Map : the position of the player "+ (i+1) +" is incorrect." );
-				}
-				lineIt++;
-			}
+			
 			// Targets
 			int nTargets = int.Parse( lines[lineIt][0] );
 			lineIt++;

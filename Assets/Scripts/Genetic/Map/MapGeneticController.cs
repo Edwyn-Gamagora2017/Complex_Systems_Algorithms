@@ -9,6 +9,7 @@ public class MapGeneticController : MonoBehaviour {
 	TextAsset mapPath;
 
 	GeneticSceneController geneticController;
+	GeneticPlayer player;
 
 	// To be executed before the component starts
 	void Awake () {
@@ -21,9 +22,13 @@ public class MapGeneticController : MonoBehaviour {
 		// Create the map based on the file
 		this.mapModel = MapGenetic.read( mapPath.text );
 
+		player = new GeneticPlayer( new Vector2(0,0), this.mapModel, geneticController );
+
 		// Setting map to view
 		if( this.GetComponent<MapGeneticView>() != null ){
+			this.GetComponent<MapGeneticView>().Player = player;
 			this.GetComponent<MapGeneticView>().MapModel = this.mapModel;
+			this.GetComponent<MapGeneticView>().MapController = this;
 		}
 			
 		this.mapModel.Graph.floydWarshall();	// Calculate all paths
@@ -37,14 +42,22 @@ public class MapGeneticController : MonoBehaviour {
 
 		return this.mapModel != null;
 	}
+
+	public float getCharacterPositionCost( GeneticCharacter c ){
+		if( this.mapModel != null ){
+			return this.mapModel.getCharacterPositionCost( c );
+		}else{
+			return float.MaxValue;
+		}
+	}
 		
 	// Use this for initialization
 	void Start () {
-		ChromosomeSalesman solution = geneticController.getSolution();
+		/*ChromosomeSalesman solution = geneticController.getSolution();
 		for( int i = 0; i < mapModel.Targets.Count; i++  ){
 			Debug.Log( "Target "+i+" : "+mapModel.Targets[i].getPosX()+" "+mapModel.Targets[i].getPosY() );
 		}
-		Debug.Log( solution.toString() );
+		Debug.Log( solution.toString() );*/
 	}
 
 	// Update is called once per frame

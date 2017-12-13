@@ -5,6 +5,7 @@ using UnityEngine;
 public class MapGeneticView : MonoBehaviour {
 
 	MapGenetic mapModel;			// stores the map information
+	MapGeneticController mapController;		// stores the map controller
 
 	Dictionary<KeyValuePair<int,int>, GameObject> tileGameObjects;	// Tile GameObjects
 
@@ -16,12 +17,28 @@ public class MapGeneticView : MonoBehaviour {
 
 	[SerializeField]
 	GameObject targetPrefab;	// Element that represents a target
+	[SerializeField]
+	GameObject playerPrefab;	// Element that represents a player
+	GeneticPlayer player;
 
 	/* PROPERTIES */
 	public MapGenetic MapModel {
 		set {
 			mapModel = value;
 			this.drawMap();
+		}
+	}
+	public MapGeneticController MapController {
+		set {
+			mapController = value;
+		}
+	}
+	public GeneticPlayer Player {
+		get {
+			return player;
+		}
+		set {
+			player = value;
 		}
 	}
 
@@ -48,6 +65,13 @@ public class MapGeneticView : MonoBehaviour {
 		result.transform.position = new Vector3(x,y,-0.1f);
 		return result;
 	}
+	private GameObject createPlayer(){
+		GameObject result = GameObject.Instantiate( playerPrefab, mapContainer.transform );
+		GeneticPlayerController playerController = result.GetComponent<GeneticPlayerController>();
+		playerController.Model = player;
+		result.transform.position = new Vector3(playerController.Model.getPosX(),playerController.Model.getPosY(),-0.1f);
+		return result;
+	}
 
 	// Create map Tiles
 	private void drawMap(){
@@ -63,6 +87,7 @@ public class MapGeneticView : MonoBehaviour {
 			foreach( GeneticTarget t in this.mapModel.Targets ){
 				this.createTarget( t.getPosX(), t.getPosY() );
 			}
+			this.createPlayer();
 			// Adjust the camera
 			Camera mapCamera = GameObject.FindObjectOfType<Camera>();
 			if( mapCamera != null ){

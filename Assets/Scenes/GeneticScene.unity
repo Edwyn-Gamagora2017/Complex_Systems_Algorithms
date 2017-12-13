@@ -178,6 +178,8 @@ MonoBehaviour:
     type: 2}
   targetPrefab: {fileID: 1855103614270144, guid: 8e8e4a5a11a0d4b44a66cae082ce0da4,
     type: 2}
+  playerPrefab: {fileID: 1685053564572036, guid: 6b86befa46ac09442819c21014336cae,
+    type: 2}
 --- !u!1 &2131213396
 GameObject:
   m_ObjectHideFlags: 0

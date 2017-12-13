@@ -27,9 +27,6 @@
 0 3 0 3 3 3 3 0
 0 0 0 0 0 0 0 0
 
-# player x y
-6 5
-
 # target amount
 6
 # target x y

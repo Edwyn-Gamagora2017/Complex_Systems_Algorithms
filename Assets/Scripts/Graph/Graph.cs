@@ -164,6 +164,9 @@ public class Graph {
 	public float getVertexCost( int index ){
 		return this.vertices[index].VertexCost;
 	}
+	public VertexInfo getVertex( int index ){
+		return this.vertices[index];
+	}
 
 	// Indicates if a index is inside the range of existing vertex indexes
 	private bool isValidVertexIndex( int index ){
