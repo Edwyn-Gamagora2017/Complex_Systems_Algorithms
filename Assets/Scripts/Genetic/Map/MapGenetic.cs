@@ -86,6 +86,12 @@ public class MapGenetic {
 			return width;
 		}
 	}
+	public Graph Graph {
+		get {
+			return graph;
+		}
+	}
+
 	/*GETTERS*/
 	public MapTileType getTileType(int x, int y){
 		if( this.isValidTilePosition(x,y) ){
@@ -192,6 +198,9 @@ public class MapGenetic {
 	}
 	public int getCharacterPositionY( GeneticCharacter c ){
 		return Mathf.RoundToInt( c.getPosY() );
+	}
+	public int getCharacterGraphPosition( GeneticCharacter c ){
+		return this.graphIndexFromTile( getCharacterPositionX(c), getCharacterPositionY(c) );
 	}
 	private bool checkCharacterPosition( GeneticCharacter c ){
 		return this.isUsefulPosition( getCharacterPositionX(c), getCharacterPositionY(c) );

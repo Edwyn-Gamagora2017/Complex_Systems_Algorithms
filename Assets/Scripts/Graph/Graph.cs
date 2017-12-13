@@ -155,6 +155,13 @@ public class Graph {
 		}
 	}
 
+	/*
+	 * GETTERS and SETTERS
+	 */
+	public int getAmountVertices(){
+		return this.vertices.Length;
+	}
+
 	// Indicates if a index is inside the range of existing vertex indexes
 	private bool isValidVertexIndex( int index ){
 		return index >= 0 && index < this.vertices.Length;

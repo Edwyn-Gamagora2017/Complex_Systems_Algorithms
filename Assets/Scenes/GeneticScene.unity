@@ -176,6 +176,8 @@ MonoBehaviour:
   mapContainer: {fileID: 1904329702}
   mapTilePrefab: {fileID: 1189613598780064, guid: 3feac82f0a4240542a44923a76bc2af4,
     type: 2}
+  targetPrefab: {fileID: 1855103614270144, guid: 8e8e4a5a11a0d4b44a66cae082ce0da4,
+    type: 2}
 --- !u!1 &2131213396
 GameObject:
   m_ObjectHideFlags: 0

@@ -12,7 +12,10 @@ public class MapGeneticView : MonoBehaviour {
 	[SerializeField]
 	GameObject mapContainer;	// Element that involve the map
 	[SerializeField]
-	GameObject mapTilePrefab;	// Element that represents a mapTile				
+	GameObject mapTilePrefab;	// Element that represents a mapTile
+
+	[SerializeField]
+	GameObject targetPrefab;	// Element that represents a target
 
 	/* PROPERTIES */
 	public MapGenetic MapModel {
@@ -40,6 +43,12 @@ public class MapGeneticView : MonoBehaviour {
 		return result;
 	}
 
+	private GameObject createTarget( float x, float y ){
+		GameObject result = GameObject.Instantiate( targetPrefab, mapContainer.transform );
+		result.transform.position = new Vector3(x,y,-0.1f);
+		return result;
+	}
+
 	// Create map Tiles
 	private void drawMap(){
 		this.tileGameObjects = new Dictionary<KeyValuePair<int, int>, GameObject>();
@@ -50,6 +59,9 @@ public class MapGeneticView : MonoBehaviour {
 					MapGenetic.MapTileType type = this.mapModel.getTileType( x,y );
 					this.tileGameObjects.Add( new KeyValuePair<int, int>( y,x ), this.createMapTile( type, x, y ) );
 				}
+			}
+			foreach( GeneticTarget t in this.mapModel.Targets ){
+				this.createTarget( t.getPosX(), t.getPosY() );
 			}
 			// Adjust the camera
 			Camera mapCamera = GameObject.FindObjectOfType<Camera>();

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class ChromosomeSalesman : Chromosome, System.IComparable<ChromosomeSalesman> {
+	public static Graph graph;
 	public static List< SalesmanCity > cities;
 
 	private List< int > path;	// path including the index of each city the Salesman must visit
@@ -30,21 +31,28 @@ public class ChromosomeSalesman : Chromosome, System.IComparable<ChromosomeSales
 
 		while (availableCities.Count > 0) {
 			int chosenCity = Random.Range (0, availableCities.Count);
-			this.path.Add (availableCities[chosenCity].Index);
+			this.path.Add (availableCities[chosenCity].IndexVertex);
 			availableCities.RemoveAt (chosenCity);
 		}
 	}
 	protected override float fitness ()
 	{
 		// Path cost
-		// TODO
+		//return ChromosomeSalesman.graph.getFloydWarshallDistance(  );
+		float distance = 0;
+		for( int i=0; i<path.Count; i++ ){
+			distance += ChromosomeSalesman.graph.getFloydWarshallDistance( cities[i].IndexVertex, cities[(i+1)%path.Count].IndexVertex );
+			// TODO attention it includes twice the cost of start vertex
+		}
+		return distance;
+		/*
 		int largestDistance = 0;
 		for( int i=1; i<path.Count; i++ ){
 			if (largestDistance < Mathf.Abs (path [i] - path [i - 1])) {
 				largestDistance = Mathf.Abs (path [i] - path [i - 1]);
 			}
 		}
-		return largestDistance;
+		return largestDistance;*/
 	}
 	public override Chromosome crossing (Chromosome c)
 	{

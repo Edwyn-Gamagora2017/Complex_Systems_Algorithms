@@ -2,16 +2,23 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SalesmanCity {
-	int index;
+public class SalesmanCity{
+	int indexCity;
+	int indexVertex;
 
-	public SalesmanCity(int index){
-		this.index = index;
+	public SalesmanCity(int indexCity, int indexVertex){
+		this.indexCity = indexCity;
+		this.indexVertex = indexVertex;
 	}
 
-	public int Index {
+	public int IndexCity {
 		get {
-			return index;
+			return indexCity;
+		}
+	}
+	public int IndexVertex {
+		get {
+			return indexVertex;
 		}
 	}
 }
