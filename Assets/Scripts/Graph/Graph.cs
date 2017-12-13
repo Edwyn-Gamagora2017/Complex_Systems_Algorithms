@@ -161,6 +161,9 @@ public class Graph {
 	public int getAmountVertices(){
 		return this.vertices.Length;
 	}
+	public float getVertexCost( int index ){
+		return this.vertices[index].VertexCost;
+	}
 
 	// Indicates if a index is inside the range of existing vertex indexes
 	private bool isValidVertexIndex( int index ){
@@ -390,7 +393,7 @@ public class Graph {
 			}
 		}
 
-		// add the start vertex to the path
+		// add the cost of start vertex to the path
 		for (int i = 0; i < this.vertices.Length; i++) {
 			for (int j = 0; j < this.vertices.Length; j++) {
 				float distanceWithStart = allDistances [i, j].DistanceToVertex + this.vertices [i].VertexCost;

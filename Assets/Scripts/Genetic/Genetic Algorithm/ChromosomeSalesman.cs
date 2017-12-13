@@ -42,19 +42,11 @@ public class ChromosomeSalesman : Chromosome, System.IComparable<ChromosomeSales
 		float distance = 0;
 		for( int i=0; i<path.Count; i++ ){
 			float partialDistance = ChromosomeSalesman.graph.getFloydWarshallDistance( cities[path[i]].IndexVertex, cities[path[(i+1)%path.Count]].IndexVertex );
-//			Debug.Log( "pqrtiql "+i+" ( "+cities[path[i]].IndexVertex+","+cities[path[(i+1)%path.Count]].IndexVertex+" ) :"+partialDistance );
+			// the distance includes ending vertex cost. it must be ignored because it is the cost of start vertex of the next path
+			partialDistance -= ChromosomeSalesman.graph.getVertexCost( cities[path[(i+1)%path.Count]].IndexVertex );
 			distance+=partialDistance;
-			// TODO attention it includes twice the cost of start vertex
 		}
 		return distance;
-		/*
-		int largestDistance = 0;
-		for( int i=1; i<path.Count; i++ ){
-			if (largestDistance < Mathf.Abs (path [i] - path [i - 1])) {
-				largestDistance = Mathf.Abs (path [i] - path [i - 1]);
-			}
-		}
-		return largestDistance;*/
 	}
 	public override Chromosome crossing (Chromosome c)
 	{
