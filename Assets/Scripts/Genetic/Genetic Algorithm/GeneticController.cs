@@ -34,16 +34,19 @@ public class GeneticController<T> where T : Chromosome, new() {
 		// Create Population
 		population = this.createPopulation();
 
-/*foreach (T c in population) {
-	Debug.Log ( "Initial = "+c.toString() );
-}*/
-
 		// Evaluation
 		population.Sort();
 
+/*
+foreach (T c in population) {
+	Debug.Log ( "Initial = "+c.toString() );
+	Debug.Log ( "Cost = "+c.fitness() );
+}
+/*/
+
 		T partialSolution = population [0];
 
-		// Finished?
+//*		// Finished?
 		while( !partialSolution.isFinalSolution() && currentGeneration < maxGenerations ){
 			// Selection
 			List<T> selectedPopulation = selectionPopulation( population );
@@ -66,8 +69,8 @@ public class GeneticController<T> where T : Chromosome, new() {
 
 			currentGeneration++;
 		}
-
-		return population[0];
+//*/
+		return partialSolution;
 	}
 
 	/*

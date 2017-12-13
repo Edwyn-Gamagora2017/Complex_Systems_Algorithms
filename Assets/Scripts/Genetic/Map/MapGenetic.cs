@@ -134,21 +134,23 @@ public class MapGenetic {
 			// create graph edges
 			if( this.isUsefulPosition( x,y ) ){	// avoid wall to create edges
 				// neighborhood 4 - applied to everyone
+				float edgeWeight = 0;
 				if( this.isUsefulPosition( x,y-1 ) ){ // UP
-					this.graph.setAdjacency( this.graphIndexFromTile(x,y),this.graphIndexFromTile(x,y-1),1 );
+					this.graph.setAdjacency( this.graphIndexFromTile(x,y),this.graphIndexFromTile(x,y-1),edgeWeight );
 				}
 				if( this.isUsefulPosition( x,y+1 ) ){ // DOWN
-					this.graph.setAdjacency( this.graphIndexFromTile(x,y),this.graphIndexFromTile(x,y+1),1 );
+					this.graph.setAdjacency( this.graphIndexFromTile(x,y),this.graphIndexFromTile(x,y+1),edgeWeight );
 				}
 				if( this.isUsefulPosition( x-1,y ) ){ // LEFT
-					this.graph.setAdjacency( this.graphIndexFromTile(x,y),this.graphIndexFromTile(x-1,y),1 );
+					this.graph.setAdjacency( this.graphIndexFromTile(x,y),this.graphIndexFromTile(x-1,y),edgeWeight );
 				}
 				if( this.isUsefulPosition( x+1,y ) ){ // RIGHT
-					this.graph.setAdjacency( this.graphIndexFromTile(x,y),this.graphIndexFromTile(x+1,y),1 );
+					this.graph.setAdjacency( this.graphIndexFromTile(x,y),this.graphIndexFromTile(x+1,y),edgeWeight );
 				}
 				// neighborhood 8
 				if( !this.neighborhood4 ){
-					float edgeWeight = Mathf.Sqrt( 2 );	// sqrt 1*1+1*1
+					//edgeWeight = Mathf.Sqrt( 2 );	// sqrt 1*1+1*1
+					edgeWeight = 1;
 					if( this.isUsefulPosition( x-1,y-1 ) ){ // UP LEFT
 						this.graph.setAdjacency( this.graphIndexFromTile(x,y),this.graphIndexFromTile(x-1,y-1), edgeWeight );
 					}

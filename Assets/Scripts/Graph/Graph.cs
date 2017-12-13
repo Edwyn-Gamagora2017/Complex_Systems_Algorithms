@@ -381,7 +381,8 @@ public class Graph {
 		for (int k = 0; k < this.vertices.Length; k++) {
 			for (int i = 0; i < this.vertices.Length; i++) {
 				for (int j = 0; j < this.vertices.Length; j++) {
-					if (allDistances [i, j].DistanceToVertex > allDistances [i, k].DistanceToVertex + allDistances [k, j].DistanceToVertex) {
+					if (allDistances [i, j].DistanceToVertex > allDistances [i, k].DistanceToVertex + allDistances [k, j].DistanceToVertex
+						&& allDistances [i, k].DistanceToVertex + allDistances [k, j].DistanceToVertex >= 0) {	// Check overflow
 						allDistances [i, j].DistanceToVertex = allDistances [i, k].DistanceToVertex + allDistances [k, j].DistanceToVertex;
 						allDistances [i, j].PreviousVertex = allDistances [k, j].PreviousVertex;
 					}
@@ -389,6 +390,7 @@ public class Graph {
 			}
 		}
 
+		// add the start vertex to the path
 		for (int i = 0; i < this.vertices.Length; i++) {
 			for (int j = 0; j < this.vertices.Length; j++) {
 				float distanceWithStart = allDistances [i, j].DistanceToVertex + this.vertices [i].VertexCost;

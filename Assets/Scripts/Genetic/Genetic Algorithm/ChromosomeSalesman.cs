@@ -31,17 +31,19 @@ public class ChromosomeSalesman : Chromosome, System.IComparable<ChromosomeSales
 
 		while (availableCities.Count > 0) {
 			int chosenCity = Random.Range (0, availableCities.Count);
-			this.path.Add (availableCities[chosenCity].IndexVertex);
+			this.path.Add (availableCities[chosenCity].IndexCity);
 			availableCities.RemoveAt (chosenCity);
 		}
 	}
-	protected override float fitness ()
+	public override float fitness ()
 	{
 		// Path cost
 		//return ChromosomeSalesman.graph.getFloydWarshallDistance(  );
 		float distance = 0;
 		for( int i=0; i<path.Count; i++ ){
-			distance += ChromosomeSalesman.graph.getFloydWarshallDistance( cities[i].IndexVertex, cities[(i+1)%path.Count].IndexVertex );
+			float partialDistance = ChromosomeSalesman.graph.getFloydWarshallDistance( cities[path[i]].IndexVertex, cities[path[(i+1)%path.Count]].IndexVertex );
+//			Debug.Log( "pqrtiql "+i+" ( "+cities[path[i]].IndexVertex+","+cities[path[(i+1)%path.Count]].IndexVertex+" ) :"+partialDistance );
+			distance+=partialDistance;
 			// TODO attention it includes twice the cost of start vertex
 		}
 		return distance;
@@ -116,7 +118,7 @@ public class ChromosomeSalesman : Chromosome, System.IComparable<ChromosomeSales
 
 	public override bool isBetterThan (Chromosome c)
 	{
-		return ((System.IComparable<ChromosomeSalesman>)this).CompareTo( (ChromosomeSalesman)c ) > 0;
+		return ((System.IComparable<ChromosomeSalesman>)this).CompareTo( (ChromosomeSalesman)c ) <= 0;
 	}
 
 	public override bool isFinalSolution ()
@@ -137,7 +139,7 @@ public class ChromosomeSalesman : Chromosome, System.IComparable<ChromosomeSales
 	{
 		float thisFit = this.fitness ();
 		float otherFit = other.fitness ();
-		return ( thisFit < otherFit ? 1 : ( thisFit > otherFit ? -1 : 0 ) );
+		return ( thisFit < otherFit ? -1 : ( thisFit > otherFit ? 1 : 0 ) );
 	}
 
 	#endregion
