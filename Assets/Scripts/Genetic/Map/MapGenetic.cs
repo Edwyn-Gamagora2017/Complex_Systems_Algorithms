@@ -130,6 +130,7 @@ public class MapGenetic {
 			// create graph edges
 			if( this.isUsefulPosition( x,y ) ){	// avoid wall to create edges
 				// neighborhood 4 - applied to everyone
+				//float edgeWeight = 1; // ignore edge
 				float edgeWeight = 0;
 				if( this.isUsefulPosition( x,y-1 ) ){ // UP
 					this.graph.setAdjacency( this.graphIndexFromTile(x,y),this.graphIndexFromTile(x,y-1),edgeWeight );
@@ -145,8 +146,8 @@ public class MapGenetic {
 				}
 				// neighborhood 8
 				if( !this.neighborhood4 ){
-					//edgeWeight = Mathf.Sqrt( 2 );	// sqrt 1*1+1*1
-					edgeWeight = 1;
+					//edgeWeight = Mathf.Sqrt( 2 );	// sqrt 1*1+1*1 // ignore edge
+					edgeWeight = 0;
 					if( this.isUsefulPosition( x-1,y-1 ) ){ // UP LEFT
 						this.graph.setAdjacency( this.graphIndexFromTile(x,y),this.graphIndexFromTile(x-1,y-1), edgeWeight );
 					}
@@ -209,21 +210,6 @@ public class MapGenetic {
 	public void addTarget( GeneticTarget target ){
 		this.targets.Add (target);
 	}
-
-	/*
-	 * PATH FINDING
-	 */
-	/*public List<PathVertexInfo> findPathFloydWarshall( Character enemy ){
-		if( this.players.Count > 0 ){
-			PathVertexInfo targetPathInfo = this.graph.aStar(
-				this.graphIndexFromTile( this.getCharacterPositionX( enemy ), this.getCharacterPositionY( enemy ) ),
-				this.graphIndexFromTile( this.getCharacterPositionX( this.players[0] ), this.getCharacterPositionY( this.players[0] ) ) );
-			if( targetPathInfo != null ){
-				return targetPathInfo.pathTo();
-			}
-		}
-		return null;
-	}*/
 
 	/*
 	 * CHARACTERS
