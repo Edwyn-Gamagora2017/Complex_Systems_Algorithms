@@ -38,10 +38,11 @@ public class ChromosomeSalesman : Chromosome, System.IComparable<ChromosomeSales
 	public override float fitness ()
 	{
 		// Path cost
-		//return ChromosomeSalesman.graph.getFloydWarshallDistance(  );
 		float distance = 0;
 		for( int i=0; i<path.Count; i++ ){
 			float partialDistance = ChromosomeSalesman.graph.getFloydWarshallDistance( cities[path[i]].IndexVertex, cities[path[(i+1)%path.Count]].IndexVertex );
+//float distance2 = ChromosomeSalesman.graph.dijkstra( cities[path[i]].IndexVertex, cities[path[(i+1)%path.Count]].IndexVertex ).DistanceToVertex;
+//Debug.Log( "Dist i = "+i+"("+cities[path[i]].IndexVertex+"), "+(i+1)%path.Count+"("+cities[path[(i+1)%path.Count]].IndexVertex+") : "+partialDistance+"/"+distance2 );
 			// the distance includes ending vertex cost. it must be ignored because it is the cost of start vertex of the next path
 			partialDistance -= ChromosomeSalesman.graph.getVertexCost( cities[path[(i+1)%path.Count]].IndexVertex );
 			distance+=partialDistance;

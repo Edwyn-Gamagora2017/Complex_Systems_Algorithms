@@ -26,9 +26,7 @@ public class GeneticSceneController : MonoBehaviour {
 	}
 
 	public ChromosomeSalesman getSolution(){
-		ChromosomeSalesman solution = geneticController.Calculate();
-		Debug.Log( solution.fitness() );
-		return solution;
+		return geneticController.Calculate();
 	}
 
 	// Use this for initialization

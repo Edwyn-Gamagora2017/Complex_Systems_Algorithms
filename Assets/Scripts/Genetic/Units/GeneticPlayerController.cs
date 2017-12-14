@@ -5,13 +5,16 @@ using UnityEngine;
 public class GeneticPlayerController : MonoBehaviour {
 	
 	private float playerMovementTimer = 0;	// Timer for enemy's movement
-	public const int moveTimeInSec = 1;	// Interval in which characther's movement is executed
+	public const float tourSeconds = 10;
+	public static float moveTimeInSec = 1;	// Interval in which characther's movement is executed
 	private GeneticPlayer model;
 
 	GeneticSceneController gController;		// Genetic controller used to find the path
 	List<int> targetOrder;					// list of targets to follow
 	int currentTarget;						// index in targetOrder list
 	List<PathVertexInfo> currentPath;		// list of tiles to follow
+
+	float begin;
 
 	public GeneticPlayer Model {
 		set {
@@ -25,11 +28,16 @@ public class GeneticPlayerController : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		// Path
-		targetOrder = this.model.GeneticController.getSolution().Path;
+		ChromosomeSalesman solution = this.model.GeneticController.getSolution();
+		targetOrder = solution.Path;
+		// Adjust move time to tour time
+		Debug.Log( solution.fitness() );
+		GeneticPlayerController.moveTimeInSec = tourSeconds/solution.fitness();
 
 		this.initialPositioning();
 
-		this.playerMovementTimer = moveTimeInSec * (this.model.positionInTheMapCost()+1);
+		this.playerMovementTimer = moveTimeInSec * (this.model.positionInTheMapCost());
+		begin = Time.time;
 	}
 
 	// Update is called once per frame
@@ -37,7 +45,7 @@ public class GeneticPlayerController : MonoBehaviour {
 		if( playerMovementTimer <= 0 ){
 			executeMovement();
 			// TODO Consider edge cost
-			playerMovementTimer = Character_Controller.moveTimeInSec * (this.model.positionInTheMapCost()+1);
+			playerMovementTimer = moveTimeInSec * (this.model.positionInTheMapCost());
 		}
 		else{
 			playerMovementTimer -= Time.deltaTime;
@@ -51,32 +59,40 @@ public class GeneticPlayerController : MonoBehaviour {
 		int vertexIndex = this.model.Map.getCharacterGraphPosition( this.model.Map.Targets[ this.targetOrder[ currentTarget ] ] );
 		MapGenetic.TileInfo vertex = this.model.Map.getTile( vertexIndex );
 		this.model.setPos( new Vector2( vertex.x, vertex.y ));
-		this.transform.position = new Vector3(this.model.getPosX(),this.model.getPosY(),-0.1f);
+		this.transform.position = new Vector3(this.model.getPosX(),this.model.getPosY(),-0.2f);
 
 		// setting path
-		int nextvertexIndex = this.model.Map.getCharacterGraphPosition( this.model.Map.Targets[ this.targetOrder[ (currentTarget+1)%this.targetOrder.Count ] ] );
-		currentPath = this.model.Map.Graph.pathToFloydWarshall( vertexIndex, nextvertexIndex );
+		this.setCurrentPath();
 	}
 
 	void executeMovement(){
 		// Move
 		if( currentTarget < this.targetOrder.Count ){
 			// Current path is finished
-			if( currentPath.Count > 0 ){
-				MapGenetic.TileInfo v = ((MapGenetic.TileInfo)currentPath[ currentPath.Count-1 ].Vertex);
-				this.model.move( v.x, v.y );
-				this.transform.position = new Vector3(this.model.getPosX(),this.model.getPosY(),-0.1f);
-				// Removing the last vertex of the path because it was used by the character
-				currentPath.RemoveAt( currentPath.Count-1 );
-			}
-			else{
+			if( currentPath.Count == 0 ){
 				currentTarget++;
-				int vertexIndex = this.model.Map.getCharacterGraphPosition( this.model.Map.Targets[ this.targetOrder[ currentTarget ] ] );
-				int nextvertexIndex = this.model.Map.getCharacterGraphPosition( this.model.Map.Targets[ this.targetOrder[ (currentTarget+1)%this.targetOrder.Count ] ] );
-				currentPath = this.model.Map.Graph.pathToFloydWarshall( vertexIndex, nextvertexIndex );
+				if( currentTarget < this.targetOrder.Count ){
+					setCurrentPath();
+				}
+				else{
+					// Tour is over
+Debug.Log( "Time to finish tour : "+ (Time.time - begin) );
+					return;
+				}
 			}
+			MapGenetic.TileInfo v = ((MapGenetic.TileInfo)currentPath[ currentPath.Count-1 ].Vertex);
+			this.model.move( v.x, v.y );
+			this.transform.position = new Vector3(this.model.getPosX(),this.model.getPosY(),-0.2f);
+			// Removing the last vertex of the path because it was used by the character
+			currentPath.RemoveAt( currentPath.Count-1 );
 		}
-		// TODO ti;e doubled on target
-		// TODO finish tour
+	}
+
+	public void setCurrentPath(){
+		int vertexIndex = this.model.Map.getCharacterGraphPosition( this.model.Map.Targets[ this.targetOrder[ currentTarget ] ] );
+		int nextvertexIndex = this.model.Map.getCharacterGraphPosition( this.model.Map.Targets[ this.targetOrder[ (currentTarget+1)%this.targetOrder.Count ] ] );
+		currentPath = this.model.Map.Graph.pathToFloydWarshall( vertexIndex, nextvertexIndex );
+		// Removing the first vertex, which is the current one
+		currentPath.RemoveAt( currentPath.Count-1 );
 	}
 }
