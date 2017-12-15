@@ -19,7 +19,8 @@ public class MapGeneticView : MonoBehaviour {
 	GameObject targetPrefab;	// Element that represents a target
 	[SerializeField]
 	GameObject playerPrefab;	// Element that represents a player
-	GeneticPlayer player;
+	List<GeneticPlayer> players;
+	List<GameObject> playersGameobjects;
 
 	/* PROPERTIES */
 	public MapGenetic MapModel {
@@ -33,13 +34,17 @@ public class MapGeneticView : MonoBehaviour {
 			mapController = value;
 		}
 	}
-	public GeneticPlayer Player {
+	public List<GeneticPlayer> Players {
 		get {
-			return player;
+			return players;
 		}
 		set {
-			player = value;
+			players = value;
 		}
+	}
+
+	void Awake(){
+		playersGameobjects = new List<GameObject>();
 	}
 
 	// Use this for initialization
@@ -65,7 +70,7 @@ public class MapGeneticView : MonoBehaviour {
 		result.transform.position = new Vector3(x,y,-0.1f);
 		return result;
 	}
-	private GameObject createPlayer(){
+	private GameObject createPlayer( GeneticPlayer player ){
 		GameObject result = GameObject.Instantiate( playerPrefab, mapContainer.transform );
 		GeneticPlayerController playerController = result.GetComponent<GeneticPlayerController>();
 		playerController.Model = player;
@@ -87,13 +92,25 @@ public class MapGeneticView : MonoBehaviour {
 			foreach( GeneticTarget t in this.mapModel.Targets ){
 				this.createTarget( t.getPosX(), t.getPosY() );
 			}
-			this.createPlayer();
 			// Adjust the camera
 			Camera mapCamera = GameObject.FindObjectOfType<Camera>();
 			if( mapCamera != null ){
 				mapCamera.transform.position = new Vector3( this.mapModel.Width/2f-0.5f, this.mapModel.Height/2f-0.5f, -1 );	// 0.5 is the size of a half of the tile
 				mapCamera.orthographicSize = Mathf.Max( this.mapModel.Width/2f, this.mapModel.Height/2f );
 			}
+		}
+	}
+
+	public void setPlayers( List<GeneticPlayer> players ){
+		this.players = players;
+
+		// clear players
+		foreach( GameObject p in playersGameobjects ){
+			Destroy( p );
+		}
+
+		foreach( GeneticPlayer p in this.players ){
+			playersGameobjects.Add( this.createPlayer( p ) );
 		}
 	}
 }

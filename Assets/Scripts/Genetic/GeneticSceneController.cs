@@ -29,6 +29,10 @@ public class GeneticSceneController : MonoBehaviour {
 		return geneticController.CalculateSolution();
 	}
 
+	public List<ChromosomeSalesman> getPartialSolution(){
+		return geneticController.CalculatePartialSolution();
+	}
+
 	// Use this for initialization
 	void Start () {
 		

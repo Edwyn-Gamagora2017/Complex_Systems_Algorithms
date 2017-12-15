@@ -26,7 +26,7 @@ public class GeneticController<T> where T : Chromosome, new() {
 	}
 
 	/*
-	 * Genetic Loop
+	 * Genetic Loop : Calculate complete solution
 	 */
 	public T CalculateSolution(){
 		List<T> population;
@@ -46,7 +46,7 @@ foreach (T c in population) {
 
 		T partialSolution = population [0];
 
-//*		// Finished?
+		// Finished?
 		while( !partialSolution.isFinalSolution() && currentGeneration < maxGenerations ){
 			// Selection
 			List<T> selectedPopulation = selectionPopulation( population );
@@ -74,8 +74,54 @@ foreach (T c in population) {
 
 			currentGeneration++;
 		}
-//*/
+
 		return partialSolution;
+	}
+
+	/*
+	 * Genetic Generation : Calculate partial solution
+	 */
+	private List<T> partialPopulation;
+	public List<T> CalculatePartialSolution(){
+		if( partialPopulation == null ){
+			// Create Population
+			partialPopulation = this.createPopulation();
+
+			// Evaluation
+			partialPopulation.Sort();
+		}
+
+		T partialSolution = partialPopulation [0];
+
+		//*		// Finished?
+		if( !partialSolution.isFinalSolution() && currentGeneration < maxGenerations ){
+			// Selection
+			List<T> selectedPopulation = selectionPopulation( partialPopulation );
+
+			// Crossing
+			partialPopulation = crossPopulation( selectedPopulation );
+
+			// Mutation in crossing result
+			mutationPopulation( partialPopulation );
+
+			// include selected ones among the new Population
+			foreach( T t in selectedPopulation ){
+				partialPopulation.Add ( t );
+			}
+
+			// Evaluation
+			partialPopulation.Sort();
+
+			if( partialPopulation[0].isBetterThan( partialSolution ) ){
+				partialSolution = partialPopulation[0];
+			}
+
+			currentGeneration++;
+			return partialPopulation;
+		}
+		else{
+			return null;
+		}
 	}
 
 	/*
