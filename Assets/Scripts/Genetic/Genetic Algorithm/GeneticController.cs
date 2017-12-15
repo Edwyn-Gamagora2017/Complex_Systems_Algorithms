@@ -28,7 +28,7 @@ public class GeneticController<T> where T : Chromosome, new() {
 	/*
 	 * Genetic Loop
 	 */
-	public T Calculate(){
+	public T CalculateSolution(){
 		List<T> population;
 
 		// Create Population
@@ -54,11 +54,16 @@ foreach (T c in population) {
 			// Crossing
 			population = crossPopulation( selectedPopulation );
 
-			// Mutation
+			// Mutation in crossing result
 			mutationPopulation( population );
 
 			// Validate Population TEST
 			//if( !validatePopulation( population ) ){ throw new UnityEngine.UnityException( "Genetic : Population is not valid generation "+currentGeneration ); } else{ Debug.Log( "Genetic : Population is valid at generation "+currentGeneration ); }
+
+			// include selected ones among the new Population
+			foreach( T t in selectedPopulation ){
+				population.Add ( t );
+			}
 
 			// Evaluation
 			population.Sort();
@@ -111,10 +116,6 @@ foreach (T c in population) {
 		for(int i=0; i<selectedSubjects.Count; i++){
 			population.Add ( (T) selectedSubjects[i].crossing( (Chromosome) selectedSubjects[(i+1)%selectedSubjects.Count] ) );
 			population.Add ( (T) selectedSubjects[(i+1)%selectedSubjects.Count].crossing( (Chromosome) selectedSubjects[i] ) );
-		}
-		// include selected ones among the new Population
-		foreach( T t in selectedSubjects ){
-			population.Add ( t );
 		}
 
 		return population;
