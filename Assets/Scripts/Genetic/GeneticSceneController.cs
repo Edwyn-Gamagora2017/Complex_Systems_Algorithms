@@ -33,6 +33,13 @@ public class GeneticSceneController : MonoBehaviour {
 		return geneticController.CalculatePartialSolution();
 	}
 
+	public int getCurrentGeneration(){
+		return geneticController.CurrentGeneration;
+	}
+	public int getMaxGeneration(){
+		return geneticController.MaxGenerations;
+	}
+
 	// Use this for initialization
 	void Start () {
 		

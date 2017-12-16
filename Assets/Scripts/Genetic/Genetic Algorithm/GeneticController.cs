@@ -12,6 +12,17 @@ public class GeneticController<T> where T : Chromosome, new() {
 	int maxGenerations;
 	int currentGeneration;
 
+	public int CurrentGeneration {
+		get {
+			return currentGeneration-1;
+		}
+	}
+	public int MaxGenerations {
+		get {
+			return maxGenerations;
+		}
+	}
+
 	// Mutation
 	int mutationPropabiblity;	// indicates D, since Probability = 1/D
 

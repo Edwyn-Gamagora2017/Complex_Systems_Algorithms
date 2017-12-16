@@ -16,9 +16,6 @@ public class MapGeneticController : MonoBehaviour {
 	List<GeneticPlayer> players;
 	List<SalesmanCity> cities;
 
-	// To be executed before the component starts
-	void Awake () {}
-
 	public bool setMap(){
 		// Create the map based on the file
 		this.mapModel = MapGenetic.read( mapPath.text );
@@ -36,7 +33,9 @@ public class MapGeneticController : MonoBehaviour {
 			// For each target, create a city indicating the index of the vertex
 			cities.Add( new SalesmanCity( i, mapModel.getCharacterGraphPosition( mapModel.Targets[i] ) ) );
 		}
-		this.selectShowSolutionMode( showBestSolution );
+		geneticController = GetComponent<GeneticSceneController>();
+		geneticController.setGraph( this.mapModel.Graph, cities );
+		//this.selectShowSolutionMode( showBestSolution );
 
 		return this.mapModel != null;
 	}
@@ -48,7 +47,11 @@ public class MapGeneticController : MonoBehaviour {
 			return float.MaxValue;
 		}
 	}
-		
+
+	void Awake(){
+		setMap();
+	}
+
 	// Use this for initialization
 	void Start () {
 		/*ChromosomeSalesman solution = geneticController.getSolution();
@@ -56,19 +59,39 @@ public class MapGeneticController : MonoBehaviour {
 			Debug.Log( "Target "+i+" : "+mapModel.Targets[i].getPosX()+" "+mapModel.Targets[i].getPosY() );
 		}
 		Debug.Log( solution.toString() );*/
-		setMap();
 	}
 
 	// Update is called once per frame
 	void Update () {
-		if(Input.GetKeyDown(KeyCode.Space)){
+		/*if(Input.GetKeyDown(KeyCode.Space)){
 			// Replay
 			this.createPlayers( true );
 		}
 		if(Input.GetKeyDown(KeyCode.KeypadEnter)){
 			// Replay
 			this.createPlayers( false );
+		}*/
+	}
+
+	public void nextGeneration(){ 	// or next solution
+		this.createPlayers( false );
+	}
+	public void replayGeneration(){ // or solution
+		this.createPlayers( true );
+	}
+	public int getCurrentGeneration(){
+		return geneticController.getCurrentGeneration();
+	}
+	public int getMaxGeneration(){
+		return geneticController.getMaxGeneration();
+	}
+	public float getSolutionFitness(){
+		if( showBestSolution && solution != null ){
+			return solution.fitness();
+		}else if( !showBestSolution && solutions != null && solutions.Count > 0 ){
+			return solutions[0].fitness();
 		}
+		return -1;
 	}
 
 	void createPlayers( bool replay ){
@@ -77,9 +100,11 @@ public class MapGeneticController : MonoBehaviour {
 				solution = geneticController.getSolution();
 			}
 
-			players = new List<GeneticPlayer>();
-			players.Add( new GeneticPlayer( new Vector2(0,0), this.mapModel, solution, false, solution.fitness() ));
-			this.GetComponent<MapGeneticView>().setPlayers( players );
+			if( solution != null ){
+				players = new List<GeneticPlayer>();
+				players.Add( new GeneticPlayer( new Vector2(0,0), this.mapModel, solution, false, solution.fitness() ));
+				this.GetComponent<MapGeneticView>().setPlayers( players );
+			}
 		}
 		else{
 			if( !replay ){
@@ -89,28 +114,28 @@ public class MapGeneticController : MonoBehaviour {
 				}
 			}
 
-			float worstFitness = 0;
-			foreach( ChromosomeSalesman solution in solutions ){
-				float fitness = solution.fitness();
-				if( fitness > worstFitness ){
-					worstFitness = fitness;
+			if( solutions != null ){
+				float worstFitness = 0;
+				foreach( ChromosomeSalesman solution in solutions ){
+					float fitness = solution.fitness();
+					if( fitness > worstFitness ){
+						worstFitness = fitness;
+					}
 				}
-			}
 
-			players = new List<GeneticPlayer>();
-			// create players
-			for(int i=0; i<solutions.Count; i++){
-				players.Add( new GeneticPlayer( new Vector2(0,0), this.mapModel, solutions[i], i==0, worstFitness ));
+				players = new List<GeneticPlayer>();
+				// create players
+				for(int i=0; i<solutions.Count; i++){
+					players.Add( new GeneticPlayer( new Vector2(0,0), this.mapModel, solutions[i], i==0, worstFitness ));
+				}
+				this.GetComponent<MapGeneticView>().setPlayers( players );
 			}
-			this.GetComponent<MapGeneticView>().setPlayers( players );
 		}
 	}
 
-	void selectShowSolutionMode( bool showBestSolution ){
+	public void selectShowSolutionMode( bool showBestSolution ){
 		this.showBestSolution = showBestSolution;
 
-		geneticController = GetComponent<GeneticSceneController>();
-		geneticController.setGraph( this.mapModel.Graph, cities );
-		this.createPlayers( false );
+		//this.createPlayers( false );
 	}
 }

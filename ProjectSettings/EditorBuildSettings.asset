@@ -4,4 +4,16 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/GeneticSceneMenu.unity
+    guid: 1768fac0ad8df8f47be8080684268ac3
+  - enabled: 1
+    path: Assets/Scenes/GeneticScene.unity
+    guid: ddadd7f3465796343929a874906e680f
+  - enabled: 1
+    path: Assets/Scenes/MainScene.unity
+    guid: 2ceb64f4efc98244f9b5630be2cba18f
+  - enabled: 1
+    path: Assets/Scenes/FlockingScene.unity
+    guid: b98a62cae57b41541b18e31fe5002c4d
