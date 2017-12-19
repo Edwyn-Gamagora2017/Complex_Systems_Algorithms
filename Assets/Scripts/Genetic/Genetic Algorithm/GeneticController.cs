@@ -26,7 +26,7 @@ public class GeneticController<T> where T : Chromosome, new() {
 	// Mutation
 	int mutationPropabiblity;	// indicates D, since Probability = 1/D
 
-	public GeneticController() : this( 10, 3, 10, 100 ){}
+	public GeneticController() : this( 100, 10, 30, 100 ){}
 
 	public GeneticController( int amountInitialSubjects, int amountSelectSubjects, int maxGenerations, int mutationPropabiblity ){
 		this.amountInitialSubjects = amountInitialSubjects;
@@ -54,8 +54,8 @@ foreach (T c in population) {
 	Debug.Log ( "Cost = "+c.fitness() );
 }
 /*/
-
 		T partialSolution = population [0];
+		this.currentGeneration = 0;
 
 		// Finished?
 		while( !partialSolution.isFinalSolution() && currentGeneration < maxGenerations ){
@@ -86,7 +86,7 @@ foreach (T c in population) {
 			currentGeneration++;
 		}
 
-		return partialSolution;
+		return population[0];
 	}
 
 	/*
@@ -171,8 +171,12 @@ foreach (T c in population) {
 
 		// Cross
 		for(int i=0; i<selectedSubjects.Count; i++){
-			population.Add ( (T) selectedSubjects[i].crossing( (Chromosome) selectedSubjects[(i+1)%selectedSubjects.Count] ) );
-			population.Add ( (T) selectedSubjects[(i+1)%selectedSubjects.Count].crossing( (Chromosome) selectedSubjects[i] ) );
+			for (int j = 0; j < selectedSubjects.Count; j++) {
+				if (i != j) {
+					population.Add ((T)selectedSubjects [i].crossing ((Chromosome)selectedSubjects [j]));
+					population.Add ((T)selectedSubjects [j].crossing ((Chromosome)selectedSubjects [i]));
+				}
+			}
 		}
 
 		return population;
